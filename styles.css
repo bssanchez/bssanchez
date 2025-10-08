@@ -252,6 +252,10 @@ body {
 /* ============================================
    Blog Posts
    ============================================ */
+#blog {
+    display: none;
+}
+
 .blog-posts {
     display: flex;
     flex-direction: column;
