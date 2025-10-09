@@ -5,7 +5,7 @@
 ### Senior Fullstack Developer | DevOps & Cloud Enthusiast
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-Visit-89b4fa?style=for-the-badge&logo=vercel&logoColor=white)](https://codesan.dev)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/brandon-sanchez-37123a54/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/bssanchez93)
 
 </div>
 
