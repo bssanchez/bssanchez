@@ -77,6 +77,7 @@ const brandon = {
 
 ---
 
+<!-- 
 ## 📊 GitHub Stats
 
 <div align="center">
@@ -90,6 +91,7 @@ const brandon = {
 </div>
 
 ---
+-->
 
 ## 🏆 Highlights
 
