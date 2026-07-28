@@ -1,8 +1,4 @@
-/* ============================================
-   Variables
-   ============================================ */
 :root {
-    /* Light Theme (Default) */
     --bg-primary: #f5f5f0;
     --bg-secondary: #e8e8e0;
     --text-primary: #2e2e2e;
@@ -16,7 +12,6 @@
 }
 
 [data-theme="dark"] {
-    /* Dark Theme - Softer colors for better readability */
     --bg-primary: #1e1e2e;
     --bg-secondary: #181825;
     --text-primary: #cdd6f4;
@@ -29,9 +24,6 @@
     --link-hover: #74c7ec;
 }
 
-/* ============================================
-   Reset
-   ============================================ */
 * {
     margin: 0;
     padding: 0;
@@ -60,9 +52,6 @@ body {
     flex-direction: column;
 }
 
-/* ============================================
-   Header
-   ============================================ */
 .terminal-header {
     display: flex;
     justify-content: space-between;
@@ -124,9 +113,6 @@ body {
     font-size: 16px;
 }
 
-/* ============================================
-   Navigation
-   ============================================ */
 .terminal-nav {
     background-color: var(--bg-secondary);
     border: 2px solid var(--border-color);
@@ -159,9 +145,6 @@ body {
     text-decoration: underline;
 }
 
-/* ============================================
-   Main Content
-   ============================================ */
 .terminal-content {
     flex: 1;
     display: flex;
@@ -169,9 +152,6 @@ body {
     gap: 30px;
 }
 
-/* ============================================
-   Sections
-   ============================================ */
 .section {
     background-color: var(--bg-secondary);
     border: 2px solid var(--border-color);
@@ -195,9 +175,6 @@ body {
     padding: 20px;
 }
 
-/* ============================================
-   ASCII Art
-   ============================================ */
 .ascii-art {
     color: var(--accent-color);
     font-size: 10px;
@@ -207,9 +184,6 @@ body {
     overflow-x: auto;
 }
 
-/* ============================================
-   Text Content
-   ============================================ */
 .text-content p {
     margin-bottom: 15px;
 }
@@ -218,9 +192,6 @@ body {
     margin-bottom: 0;
 }
 
-/* ============================================
-   Achievements
-   ============================================ */
 .file-list {
     list-style: none;
 }
@@ -247,13 +218,6 @@ body {
 .file-name {
     flex: 1;
     min-width: 200px;
-}
-
-/* ============================================
-   Blog Posts
-   ============================================ */
-#blog {
-    display: none;
 }
 
 .blog-posts {
@@ -291,14 +255,38 @@ body {
     color: var(--text-primary);
 }
 
+.post-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.post-title a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
 .post-excerpt {
     color: var(--text-secondary);
     margin-left: 0;
 }
 
-/* ============================================
-   Experience
-   ============================================ */
+.post-readmore {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.post-readmore::after {
+    content: ' →';
+    color: var(--accent-color);
+}
+
+.post-readmore:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
 .experience-list {
     display: flex;
     flex-direction: column;
@@ -350,9 +338,6 @@ body {
     color: var(--accent-color);
 }
 
-/* ============================================
-   Contact Section
-   ============================================ */
 .contact-info p {
     margin-bottom: 15px;
 }
@@ -402,9 +387,6 @@ body {
     margin-bottom: 8px;
 }
 
-/* ============================================
-   Footer
-   ============================================ */
 .terminal-footer {
     margin-top: 30px;
     padding: 20px;
@@ -416,15 +398,28 @@ body {
 .footer-content {
     font-size: 12px;
     color: var(--text-secondary);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-content a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-content a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
 }
 
 .separator {
     margin: 0 10px;
+    color: var(--border-color);
 }
 
-/* ============================================
-   Responsive Design
-   ============================================ */
 @media (max-width: 768px) {
     body {
         font-size: 13px;
@@ -489,9 +484,6 @@ body {
     }
 }
 
-/* ============================================
-   Accessibility
-   ============================================ */
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms !important;
@@ -504,16 +496,12 @@ body {
     }
 }
 
-/* Focus styles for keyboard navigation */
 a:focus,
 button:focus {
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;
 }
 
-/* ============================================
-   Print Styles
-   ============================================ */
 @media print {
     body {
         background-color: white;

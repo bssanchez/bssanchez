@@ -1,36 +1,20 @@
-// ============================================
-// Portfolio Terminal - Main JavaScript
-// ============================================
-
 (function() {
     'use strict';
 
-    // ============================================
-    // State Management
-    // ============================================
     const state = {
         currentLang: document.body.getAttribute('data-lang') || 'en',
         currentTheme: 'light'
     };
 
-    // ============================================
-    // DOM Elements
-    // ============================================
     const elements = {
         themeToggle: document.getElementById('themeToggle'),
         body: document.body
     };
 
-    // ============================================
-    // Local Storage Keys
-    // ============================================
     const STORAGE_KEYS = {
         THEME: 'portfolio_theme'
     };
 
-    // ============================================
-    // Initialize Application
-    // ============================================
     function init() {
         loadPreferences();
         attachEventListeners();
@@ -39,9 +23,6 @@
         initTypingEffect();
     }
 
-    // ============================================
-    // Load User Preferences from Local Storage
-    // ============================================
     function loadPreferences() {
         const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME);
 
@@ -50,46 +31,30 @@
         }
     }
 
-    // ============================================
-    // Save Preferences to Local Storage
-    // ============================================
     function savePreferences() {
         localStorage.setItem(STORAGE_KEYS.THEME, state.currentTheme);
     }
 
-    // ============================================
-    // Event Listeners
-    // ============================================
     function attachEventListeners() {
         if (elements.themeToggle) {
             elements.themeToggle.addEventListener('click', toggleTheme);
         }
 
-        // Keyboard shortcuts
         document.addEventListener('keydown', handleKeyboardShortcuts);
     }
 
-    // ============================================
-    // Keyboard Shortcuts
-    // ============================================
     function handleKeyboardShortcuts(e) {
-        // Alt + T: Toggle Theme
         if (e.altKey && e.key === 't') {
             e.preventDefault();
             toggleTheme();
         }
     }
 
-
-    // ============================================
-    // Theme Toggle
-    // ============================================
     function toggleTheme() {
         state.currentTheme = state.currentTheme === 'light' ? 'dark' : 'light';
         applyTheme(state.currentTheme);
         savePreferences();
 
-        // Add visual feedback
         if (elements.themeToggle) {
             elements.themeToggle.style.transform = 'rotate(180deg)';
             setTimeout(() => {
@@ -98,9 +63,6 @@
         }
     }
 
-    // ============================================
-    // Apply Theme
-    // ============================================
     function applyTheme(theme) {
         if (theme === 'dark') {
             elements.body.setAttribute('data-theme', 'dark');
@@ -109,9 +71,6 @@
         }
     }
 
-    // ============================================
-    // Smooth Scroll for Navigation
-    // ============================================
     function initSmoothScroll() {
         const navLinks = document.querySelectorAll('.terminal-nav a[href^="#"]');
         
@@ -131,7 +90,6 @@
                         behavior: 'smooth'
                     });
 
-                    // Add active state visual feedback
                     this.style.color = 'var(--accent-color)';
                     setTimeout(() => {
                         this.style.color = '';
@@ -141,14 +99,10 @@
         });
     }
 
-    // ============================================
-    // Typing Effect for Terminal Title
-    // ============================================
     function initTypingEffect() {
         const cursor = document.querySelector('.cursor-blink');
         if (!cursor) return;
 
-        // Optional: Add typing animation on load
         const terminalTitle = document.querySelector('.terminal-title .prompt');
         if (terminalTitle) {
             terminalTitle.style.opacity = '0';
@@ -159,37 +113,43 @@
         }
     }
 
-    // ============================================
-    // Section Visibility Animation
-    // ============================================
     function initScrollAnimations() {
         const sections = document.querySelectorAll('.section');
-        
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+
+        const reveal = (el) => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
         };
+
+        if (!('IntersectionObserver' in window)) return;
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    reveal(entry.target);
+                    observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0, rootMargin: '0px 0px -50px 0px' });
+
+        const hidden = [];
 
         sections.forEach(section => {
+            const box = section.getBoundingClientRect();
+            if (box.top < window.innerHeight && box.bottom > 0) return;
+
             section.style.opacity = '0';
             section.style.transform = 'translateY(20px)';
             section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            hidden.push(section);
             observer.observe(section);
         });
+
+        if (hidden.length) {
+            setTimeout(() => hidden.forEach(reveal), 3000);
+        }
     }
 
-    // ============================================
-    // Easter Egg: Konami Code
-    // ============================================
     function initEasterEgg() {
         const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
         let konamiIndex = 0;
@@ -227,9 +187,6 @@
         console.log('🎮 Konami Code activated! You found the easter egg!');
     }
 
-    // ============================================
-    // Console Welcome Message
-    // ============================================
     function showWelcomeMessage() {
         const styles = [
             'color: #00ff00',
@@ -250,8 +207,6 @@
         `, styles);
     }
 
-    // ============================================
-    // Performance: Debounce Function
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -264,20 +219,11 @@
         };
     }
 
-    // ============================================
-    // Window Resize Handler
-    // ============================================
     function handleResize() {
-        // Add any resize-specific logic here
-        // Currently handled by CSS media queries
     }
 
-    // Attach debounced resize handler
     window.addEventListener('resize', debounce(handleResize, 250));
 
-    // ============================================
-    // Start Application
-    // ============================================
     document.addEventListener('DOMContentLoaded', () => {
         init();
         initScrollAnimations();
@@ -285,9 +231,6 @@
         showWelcomeMessage();
     });
 
-    // ============================================
-    // Expose API for debugging (optional)
-    // ============================================
     if (typeof window !== 'undefined') {
         window.portfolioAPI = {
             getState: () => ({ ...state }),

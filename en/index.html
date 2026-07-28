@@ -12,10 +12,47 @@
       content="fullstack developer, devops, aws, react, nextjs, software architect"
     />
     <meta name="author" content="Brandon Sanchez" />
-    <link rel="canonical" href="https://codesan.dev/en.html" />
-    <link rel="alternate" hreflang="en" href="https://codesan.dev/en.html" />
-    <link rel="alternate" hreflang="es" href="https://codesan.dev/" />
     <title>Brandon Sanchez - Senior Fullstack Developer | Portfolio</title>
+
+    <link rel="canonical" href="https://codesan.dev/en/" />
+    <link rel="alternate" hreflang="es" href="https://codesan.dev/" />
+    <link rel="alternate" hreflang="en" href="https://codesan.dev/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://codesan.dev/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="codesan.dev" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_CO" />
+    <meta property="og:url" content="https://codesan.dev/en/" />
+    <meta
+      property="og:title"
+      content="Brandon Sanchez - Senior Fullstack Developer"
+    />
+    <meta
+      property="og:description"
+      content="Fullstack developer with 12+ years of experience. DevOps, Cloud and AI/LLM integration."
+    />
+    <meta property="og:image" content="https://codesan.dev/assets/og/home.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Terminal showing the prompt bsanchez@codesan.dev and the name Brandon Sanchez"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Brandon Sanchez - Senior Fullstack Developer"
+    />
+    <meta
+      name="twitter:description"
+      content="Fullstack developer with 12+ years of experience. DevOps, Cloud and AI/LLM integration."
+    />
+    <meta name="twitter:image" content="https://codesan.dev/assets/og/home.png" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#1e1e2e" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,11 +60,34 @@
       href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Brandon Sanchez",
+        "url": "https://codesan.dev/",
+        "jobTitle": "Senior Fullstack Developer",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "CO"
+        },
+        "sameAs": [
+          "https://github.com/bssanchez",
+          "https://www.linkedin.com/in/bssanchez93/"
+        ],
+        "knowsAbout": [
+          "Fullstack Development",
+          "DevOps",
+          "Cloud Architecture",
+          "AI/LLM Integration"
+        ]
+      }
+    </script>
   </head>
   <body data-lang="en">
     <div class="container">
-      <!-- Header / Terminal Bar -->
       <header class="terminal-header">
         <div class="terminal-title">
           <span class="prompt">bsanchez@codesan.dev:~$</span>
@@ -35,7 +95,7 @@
         </div>
         <div class="terminal-controls">
           <a
-            href="index.html"
+            href="/"
             class="control-btn"
             aria-label="Cambiar a Español"
           >
@@ -51,20 +111,17 @@
         </div>
       </header>
 
-      <!-- Navigation -->
       <nav class="terminal-nav">
         <ul>
           <li><a href="#about">about</a></li>
           <li><a href="#skills">skills</a></li>
           <li><a href="#achievements">achievements</a></li>
-          <!-- <li><a href="#blog">blog</a></li> -->
+          <li><a href="#blog">blog</a></li>
           <li><a href="#contact">contact</a></li>
         </ul>
       </nav>
 
-      <!-- Main Content -->
       <main class="terminal-content">
-        <!-- About Section -->
         <section id="about" class="section">
           <div class="section-header">
             <span class="prompt">~$</span>
@@ -111,7 +168,6 @@
           </div>
         </section>
 
-        <!-- Skills Section -->
         <section id="skills" class="section">
           <div class="section-header">
             <span class="prompt">~$</span>
@@ -161,7 +217,6 @@
           </div>
         </section>
 
-        <!-- Achievements Section -->
         <section id="achievements" class="section">
           <div class="section-header">
             <span class="prompt">~$</span>
@@ -267,7 +322,6 @@
           </div>
         </section>
 
-        <!-- Blog Section -->
         <section id="blog" class="section">
           <div class="section-header">
             <span class="prompt">~$</span>
@@ -277,45 +331,28 @@
             <div class="blog-posts">
               <article class="blog-post">
                 <div class="post-header">
-                  <span class="post-date">[Coming Soon]</span>
-                  <h3 class="post-title">The Beauty of Simplicity in Code</h3>
-                </div>
-                <p class="post-excerpt">
-                  Why less is often more when it comes to writing maintainable
-                  software...
-                </p>
-              </article>
-
-              <article class="blog-post">
-                <div class="post-header">
-                  <span class="post-date">[Coming Soon]</span>
+                  <span class="post-date">[2026-07-28]</span>
                   <h3 class="post-title">
-                    Terminal Aesthetics in Modern Web Design
+                    <a href="/en/blog/opencode-free-models.html"
+                      >7 free opencode models, one prompt: what each one
+                      actually shipped</a
+                    >
                   </h3>
                 </div>
                 <p class="post-excerpt">
-                  Exploring the resurgence of retro terminal-inspired
-                  interfaces...
+                  One prompt, seven models, zero help: no skills, no MCPs, no
+                  spec-driven workflow. Three shipped something usable, one
+                  shipped nothing, and the worst failure wasn't visible in the
+                  code — it took HTTP requests to find it...
                 </p>
-              </article>
-
-              <article class="blog-post">
-                <div class="post-header">
-                  <span class="post-date">[Coming Soon]</span>
-                  <h3 class="post-title">
-                    Learning in Public: A Developer's Journey
-                  </h3>
-                </div>
-                <p class="post-excerpt">
-                  Sharing knowledge and experiences as a way to grow and
-                  connect...
-                </p>
+                <a href="/en/blog/opencode-free-models.html" class="post-readmore"
+                  >read</a
+                >
               </article>
             </div>
           </div>
         </section>
 
-        <!-- Contact Section -->
         <section id="contact" class="section">
           <div class="section-header">
             <span class="prompt">~$</span>
@@ -337,10 +374,10 @@
                 <li>
                   <span class="contact-label">linkedin:</span>
                   <a
-                    href="https://www.linkedin.com/in/brandon-sanchez-37123a54/"
+                    href="https://www.linkedin.com/in/bssanchez93/"
                     target="_blank"
                     rel="noopener"
-                    >linkedin.com/in/brandon-sanchez-37123a54</a
+                    >linkedin.com/in/bssanchez93</a
                   >
                 </li>
                 <li>
@@ -353,16 +390,26 @@
         </section>
       </main>
 
-      <!-- Footer -->
       <footer class="terminal-footer">
         <div class="footer-content">
-          <span>Last updated: 2024-10-07</span>
+          <span>&copy; 2026 Brandon Sanchez</span>
           <span class="separator">|</span>
-          <span>Built with ♥ and vanilla HTML, CSS & JavaScript</span>
+          <a href="https://github.com/bssanchez" target="_blank" rel="noopener"
+            >github</a
+          >
+          <span class="separator">&middot;</span>
+          <a
+            href="https://www.linkedin.com/in/bssanchez93/"
+            target="_blank"
+            rel="noopener"
+            >linkedin</a
+          >
+          <span class="separator">|</span>
+          <span>Last updated: <time datetime="2026-07-28">2026-07-28</time></span>
         </div>
       </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
   </body>
 </html>

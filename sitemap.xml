@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://codesan.dev/</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://codesan.dev/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://codesan.dev/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://codesan.dev/"/>
+  </url>
+
+  <url>
+    <loc>https://codesan.dev/en/</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://codesan.dev/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://codesan.dev/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://codesan.dev/"/>
+  </url>
+
+  <url>
+    <loc>https://codesan.dev/blog/opencode-modelos-gratis</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://codesan.dev/blog/opencode-modelos-gratis"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://codesan.dev/en/blog/opencode-free-models"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://codesan.dev/blog/opencode-modelos-gratis"/>
+  </url>
+
+  <url>
+    <loc>https://codesan.dev/en/blog/opencode-free-models</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://codesan.dev/blog/opencode-modelos-gratis"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://codesan.dev/en/blog/opencode-free-models"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://codesan.dev/blog/opencode-modelos-gratis"/>
+  </url>
+
+</urlset>

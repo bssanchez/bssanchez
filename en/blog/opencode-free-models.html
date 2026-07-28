@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A hands-on comparison of opencode's 7 free models: one prompt, no skills, no MCPs, no spec-driven workflow. What each one shipped, and what broke once the browser opened."
+    />
+    <meta
+      name="keywords"
+      content="opencode, free models, llm, deepseek, ling, mimo, nemotron, comparison, agentic development"
+    />
+    <meta name="author" content="Brandon Sanchez" />
+    <title>
+      7 free opencode models, one prompt: what each actually shipped | Brandon
+      Sanchez
+    </title>
+
+    <link rel="canonical" href="https://codesan.dev/en/blog/opencode-free-models" />
+    <link rel="alternate" hreflang="es" href="https://codesan.dev/blog/opencode-modelos-gratis" />
+    <link rel="alternate" hreflang="en" href="https://codesan.dev/en/blog/opencode-free-models" />
+    <link rel="alternate" hreflang="x-default" href="https://codesan.dev/blog/opencode-modelos-gratis" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="codesan.dev" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_CO" />
+    <meta property="og:url" content="https://codesan.dev/en/blog/opencode-free-models" />
+    <meta
+      property="og:title"
+      content="7 free opencode models, one prompt: what each one actually shipped"
+    />
+    <meta
+      property="og:description"
+      content="One prompt, seven models, zero help: no skills, no MCPs, no spec-driven workflow. Three shipped something usable, one shipped nothing, and the worst failure wasn't visible in the code."
+    />
+    <meta
+      property="og:image"
+      content="https://codesan.dev/assets/og/opencode-en.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Terminal showing the command: cat opencode-free-models.md"
+    />
+    <meta property="article:published_time" content="2026-07-28" />
+    <meta property="article:author" content="Brandon Sanchez" />
+    <meta property="article:tag" content="opencode" />
+    <meta property="article:tag" content="LLM" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="7 free opencode models, one prompt"
+    />
+    <meta
+      name="twitter:description"
+      content="One prompt, seven models, zero help. Three shipped something usable, one shipped nothing, and the worst failure wasn't visible in the code."
+    />
+    <meta
+      name="twitter:image"
+      content="https://codesan.dev/assets/og/opencode-en.png"
+    />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#1e1e2e" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "7 free opencode models, one prompt: what each one actually shipped",
+        "description": "One prompt, seven models, zero help: no skills, no MCPs, no spec-driven workflow. What each one shipped, and what broke once the browser opened.",
+        "inLanguage": "en",
+        "datePublished": "2026-07-28",
+        "dateModified": "2026-07-28",
+        "image": "https://codesan.dev/assets/og/opencode-en.png",
+        "author": {
+          "@type": "Person",
+          "name": "Brandon Sanchez",
+          "url": "https://codesan.dev/"
+        },
+        "publisher": {
+          "@type": "Person",
+          "name": "Brandon Sanchez",
+          "url": "https://codesan.dev/"
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://codesan.dev/en/blog/opencode-free-models"
+        }
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/blog.css" />
+  </head>
+  <body data-lang="en">
+    <div class="container">
+      <header class="terminal-header">
+        <div class="terminal-title">
+          <span class="prompt">bsanchez@codesan.dev:~/blog$</span>
+          <span class="cursor-blink">_</span>
+        </div>
+        <div class="terminal-controls">
+          <a
+            href="/blog/opencode-modelos-gratis.html"
+            class="control-btn"
+            aria-label="Cambiar a Español"
+          >
+            <span class="lang-indicator">ES</span>
+          </a>
+          <button id="themeToggle" class="control-btn" aria-label="Toggle Theme">
+            <span class="theme-icon">◐</span>
+          </button>
+        </div>
+      </header>
+
+      <nav class="terminal-nav">
+        <ul>
+          <li><a href="/en/">home</a></li>
+          <li><a href="/en/#about">about</a></li>
+          <li><a href="/en/#blog">blog</a></li>
+          <li><a href="/en/#contact">contact</a></li>
+        </ul>
+      </nav>
+
+      <main class="terminal-content">
+        <article class="section">
+          <div class="section-header">
+            <span class="prompt">~$</span>
+            <span class="command">cat opencode-free-models.md</span>
+          </div>
+          <div class="section-content">
+            <div class="post-meta">
+              <span><span class="meta-key">date:</span> 2026-07-28</span>
+              <span><span class="meta-key">read:</span> ~12 min</span>
+              <span
+                ><span class="meta-key">tags:</span> opencode, llm, agents</span
+              >
+            </div>
+
+            <div class="post-body">
+              <h1 style="font-size: 19px; margin-bottom: 18px">
+                7 free opencode models, one prompt: what each one actually
+                shipped
+              </h1>
+
+              <p>
+                opencode ships a batch of free models and the obvious question
+                is which ones are worth using. I couldn't find a comparison
+                that convinced me, so I ran my own:
+                <strong>one prompt, seven models, zero help</strong>. What
+                follows is the log of that morning.
+              </p>
+
+              <p>
+                Spoiler on the result I didn't see coming: the worst failure
+                wasn't design or code. It was something
+                <em>no</em> code review would have caught, and I needed HTTP
+                requests to find it.
+              </p>
+
+              <h2>The rules: everything vanilla</h2>
+
+              <p>
+                This matters, because it defines what the experiment measures
+                and what it doesn't. The test was deliberately raw:
+              </p>
+
+              <ul>
+                <li><strong>No skills.</strong> No instructions loaded.</li>
+                <li><strong>No MCPs.</strong> No context servers connected.</li>
+                <li>
+                  <strong>No spec-driven development.</strong> No upfront spec
+                  document, no plan, no phases.
+                </li>
+                <li>
+                  <strong>No agentic techniques.</strong> No forced
+                  chain-of-thought, no self-critique, no iteration, no "review
+                  your work".
+                </li>
+                <li>
+                  <strong>A single turn.</strong> I pasted the prompt, waited,
+                  and whatever came out is what I graded. No corrections, no
+                  second chances.
+                </li>
+              </ul>
+
+              <p>
+                This does <strong>not</strong> measure each model's ceiling.
+                Decent agentic scaffolding would have fixed half the problems I
+                found. What it measures is the <strong>floor</strong>: what the
+                model hands you when you ask the way you'd ask a colleague, no
+                ceremony. And when you're deciding which free model is worth
+                your time, the floor is exactly what you want to know.
+              </p>
+
+              <h3>The prompt, verbatim</h3>
+
+              <div class="prompt-box">
+                <div class="prompt-box-header">PROMPT SENT TO ALL 7 MODELS</div>
+                <div class="prompt-box-body">
+                  <p>
+                    <em>(original in Spanish)</em> Build a landing page to
+                    promote a music school in Soacha, Cundinamarca called
+                    Javastudios. It must meet the following requirements:
+                  </p>
+                  <ol>
+                    <li>Use blue colors</li>
+                    <li>Have a very attractive minimalist design</li>
+                    <li>have at least a subtle animation</li>
+                    <li>have a call to action that leads to whatsapp</li>
+                    <li>Have navigation and footer</li>
+                    <li>Have images from Unsplash</li>
+                  </ol>
+                </div>
+              </div>
+
+              <p>
+                Six verifiable requirements, a real local business, specific
+                enough that the model can't coast on autopilot. No further
+                context: no phone number, no pricing, no years in business, no
+                course catalog.
+                <strong>Hold on to that detail</strong> — it ends up being the
+                heart of this article.
+              </p>
+
+              <h2>The contenders</h2>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Model</th>
+                      <th>Time</th>
+                      <th>Run notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>DeepSeek V4 Flash</td>
+                      <td><span class="val-ok">42s</span></td>
+                      <td class="wrap">No friction</td>
+                    </tr>
+                    <tr>
+                      <td>MiMo v2.5</td>
+                      <td>1m 53s</td>
+                      <td class="wrap">
+                        With <code>default</code> it couldn't find the provider;
+                        needed <code>variant: medium</code>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Big Pickle</td>
+                      <td>2m 05s</td>
+                      <td class="wrap">Wrote into its own subfolder</td>
+                    </tr>
+                    <tr>
+                      <td>Ling 3.0 Flash</td>
+                      <td>2m 17s</td>
+                      <td class="wrap">No friction</td>
+                    </tr>
+                    <tr>
+                      <td>North Mini Code</td>
+                      <td>4m 17s</td>
+                      <td class="wrap">No friction</td>
+                    </tr>
+                    <tr>
+                      <td>Laguna S 2.1</td>
+                      <td><span class="val-warn">20m 48s</span>*</td>
+                      <td class="wrap">*Almost entirely rate-limit waits</td>
+                    </tr>
+                    <tr>
+                      <td>Nemotron 3 Ultra</td>
+                      <td><span class="val-bad">—</span></td>
+                      <td class="wrap">
+                        <code>Streaming response failed</code> on every attempt
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p>Let's start with the one that never made it to the track.</p>
+
+              <h2>Nemotron 3 Ultra: announced it, never delivered</h2>
+
+              <p>
+                The only "Ultra" in the batch and the only one that produced not
+                a single line. The pattern repeated identically every attempt:
+                it processed the prompt, announced it was going to create
+                <code>index.html</code>… and died with
+                <code>Streaming response failed</code>. It never wrote the file.
+              </p>
+
+              <p>
+                That's not a judgment on the model's capability — it's a
+                judgment on its availability, which for anyone trying to get
+                work done is the same thing. A model that doesn't respond has
+                zero quality, regardless of what it might have been able to do.
+                It's out of the comparison by no-show.
+              </p>
+
+              <h2>How I graded the six that did deliver</h2>
+
+              <p>
+                Beyond opening them in a browser and looking at them the way a
+                client would, I did three things that turned out to separate the
+                wheat from the chaff:
+              </p>
+
+              <ol>
+                <li>
+                  <strong>Full-page headless rendering</strong> with Firefox,
+                  disabling <code>loading="lazy"</code> and forcing reveals, so
+                  the screenshot shows the real page and not a half-loaded one.
+                </li>
+                <li>
+                  <strong>HTTP verification of every external resource</strong>:
+                  every Unsplash URL, every CDN, every stylesheet.
+                </li>
+                <li>
+                  <strong>Reading the JavaScript</strong>, not just the HTML.
+                  That's where the worst surprises were hiding.
+                </li>
+              </ol>
+
+              <hr />
+
+              <h2>Model by model</h2>
+
+              <div class="model-card">
+                <div class="model-card-header">
+                  <span class="model-rank">[1]</span>
+                  <span class="model-name">Big Pickle</span>
+                  <span class="model-alias">2m 05s &middot; 26 KB &middot; 575 lines</span>
+                </div>
+                <div class="model-card-body">
+                  <div class="model-stats">
+                    <span>Height: <b>4365px</b></span>
+                    <span>Images: <b class="val-ok">10/11</b></span>
+                    <span>Scroll reveal: <b class="val-ok">yes</b></span>
+                    <span>Footer year: <b class="val-ok">2026</b></span>
+                  </div>
+
+                  <figure>
+                    <img
+                      src="/assets/blog/big-pickle.jpg"
+                      alt="Landing page by Big Pickle: blue hero with trumpet, 6-course grid, gallery and testimonials"
+                      loading="lazy"
+                    />
+                    <figcaption>
+                      Big Pickle — organic curve on the hero, 3×2 grid with no
+                      orphans. The gap in the gallery is its single 404.
+                    </figcaption>
+                  </figure>
+
+                  <p>
+                    My winner, for one concrete reason: it's
+                    <strong>the only one that managed to be complete without
+                    giving up on minimalism</strong>. 4365px tall against
+                    MiMo's 4875 and Ling's 4964, with the same number of
+                    sections and images. When two of the six requirements pull
+                    in opposite directions — "minimalist" versus "navigation,
+                    footer, images" — it negotiated best.
+                  </p>
+
+                  <p>
+                    It's also the only one with actual
+                    <strong>design personality</strong>: an organic curve on the
+                    hero transition, hover overlays on the gallery, and a
+                    <code>@keyframes pulse-wa</code> that gently pulses the
+                    WhatsApp button. The others exhaust their repertoire on
+                    <code>fadeUp</code> and <code>float</code>.
+                  </p>
+
+                  <p>
+                    And the sharpest localization of the six. It doesn't say
+                    "percussion classes": it says
+                    <em>"drums, cajón, Latin percussion and Colombian
+                    rhythms"</em>. It doesn't say "music production": it says
+                    <em>"FL Studio, Ableton, mixing and mastering"</em>. That's
+                    not filling in a template.
+                  </p>
+
+                  <p>
+                    <strong>What I hold against it:</strong> eight
+                    <code>href="#"</code> links and a "Blog" link in the footer
+                    pointing at a section that doesn't exist. Navigation that
+                    promises and doesn't deliver.
+                  </p>
+                </div>
+              </div>
+
+              <div class="model-card">
+                <div class="model-card-header">
+                  <span class="model-rank">[2]</span>
+                  <span class="model-name">MiMo v2.5</span>
+                  <span class="model-alias">1m 53s &middot; 24 KB &middot; 538 lines</span>
+                </div>
+                <div class="model-card-body">
+                  <div class="model-stats">
+                    <span>Height: <b>4875px</b></span>
+                    <span>Images: <b class="val-ok">10/11</b></span>
+                    <span>Scroll reveal: <b class="val-ok">yes</b></span>
+                    <span>Footer year: <b class="val-ok">2026</b></span>
+                  </div>
+
+                  <figure>
+                    <img
+                      src="/assets/blog/mimo.jpg"
+                      alt="Landing page by MiMo: hero with background photo and blue overlay, 6 courses, 3x2 gallery"
+                      loading="lazy"
+                    />
+                    <figcaption>
+                      MiMo — the only one with a full-bleed photo hero. The grey
+                      box next to the stats is its broken image.
+                    </figcaption>
+                  </figure>
+
+                  <p>
+                    A technical tie with Big Pickle on every hard metric. Its
+                    edge: it's the
+                    <strong>only one with a full-bleed photographic hero</strong>,
+                    with a blue gradient overlay. The others either put the
+                    photo beside the text or skipped it entirely. That's the
+                    difference between looking like a landing page and looking
+                    like a markup exercise.
+                  </p>
+
+                  <p>
+                    And it's the only one besides Big Pickle that
+                    <strong>squared every grid</strong>: 6 courses in an exact
+                    3×2, 6 photos in an exact 3×2, 3 testimonials in a row.
+                    Zero orphaned cards. Ling and Laguna left danglers in two
+                    sections each. Picking numbers that close is design
+                    judgment, not luck.
+                  </p>
+
+                  <p>
+                    A detail I liked: it used
+                    <code>hola@javastudios.co</code>, with the Colombian TLD.
+                    Nobody asked it to.
+                  </p>
+
+                  <p>
+                    <strong>Reproducibility note:</strong> with the default
+                    config opencode couldn't find the provider. It needed
+                    <code>variant: medium</code>. That's plumbing, not the
+                    model, but if you rerun this experiment you'll hit it.
+                  </p>
+                </div>
+              </div>
+
+              <div class="model-card">
+                <div class="model-card-header">
+                  <span class="model-rank">[3]</span>
+                  <span class="model-name">Ling 3.0 Flash</span>
+                  <span class="model-alias">2m 17s &middot; 34 KB &middot; 1240 lines</span>
+                </div>
+                <div class="model-card-body">
+                  <div class="model-stats">
+                    <span>Height: <b>4964px</b></span>
+                    <span>Images: <b class="val-ok">6/7</b></span>
+                    <span>Scroll reveal: <b class="val-ok">yes</b></span>
+                    <span>Footer year: <b class="val-ok">2026</b></span>
+                  </div>
+
+                  <figure>
+                    <img
+                      src="/assets/blog/ling.jpg"
+                      alt="Landing page by Ling: blue hero, courses section, COP pricing table and testimonials"
+                      loading="lazy"
+                    />
+                    <figcaption>
+                      Ling — the only one that built a pricing table. The first
+                      course card is the one that lost its image.
+                    </figcaption>
+                  </figure>
+
+                  <p>
+                    The longest of the batch, and the one that best understood
+                    this is a <em>business</em> landing page, not a CSS
+                    exercise. It's the only one that built a
+                    <strong>pricing table</strong> — $150,000 / $280,000 /
+                    $450,000 COP per month, entirely plausible figures for
+                    Soacha — and the one that wrote testimonials with Colombian
+                    names. The most deliberate localization after Big Pickle.
+                  </p>
+
+                  <p>
+                    Technically it did the animation right:
+                    <code>IntersectionObserver</code> with
+                    <code>threshold: 0.15</code> and a staggered
+                    <code>transitionDelay</code> generated in JS. It gave me
+                    trouble to capture: my screenshot came out with three empty
+                    sections until I forced the reveal by hand.
+                  </p>
+
+                  <p>
+                    <strong>Bad luck with the broken image:</strong> of its
+                    seven, the single 404 landed on the first course card — the
+                    first thing a visitor looks at after the hero.
+                  </p>
+
+                  <p>
+                    <strong>And an interesting act of disobedience:</strong> the
+                    floating WhatsApp button is <em>green</em>, on a palette the
+                    prompt asked to be blue. Commercially it's the right call:
+                    green is instant brand recognition. Against the brief, it's
+                    non-compliance. I'd sign off on it, but it deserves to be
+                    named.
+                  </p>
+                </div>
+              </div>
+
+              <div class="model-card">
+                <div class="model-card-header">
+                  <span class="model-rank">[4]</span>
+                  <span class="model-name">DeepSeek V4 Flash</span>
+                  <span class="model-alias">42s &middot; 13 KB &middot; 363 lines</span>
+                </div>
+                <div class="model-card-body">
+                  <div class="model-stats">
+                    <span>Height: <b class="val-ok">2621px</b></span>
+                    <span>Images: <b>3/4</b></span>
+                    <span>Scroll reveal: <b class="val-bad">no</b></span>
+                    <span>Footer year: <b class="val-ok">2026</b></span>
+                  </div>
+
+                  <figure>
+                    <img
+                      src="/assets/blog/deepseek.jpg"
+                      alt="Landing page by DeepSeek: hero with side photo, three course cards, gallery and blue CTA"
+                      loading="lazy"
+                    />
+                    <figcaption>
+                      DeepSeek — half the height of everyone else. The cleanest
+                      and the most incomplete at the same time.
+                    </figcaption>
+                  </figure>
+
+                  <p>
+                    <strong>Fastest by a ridiculous margin: 42 seconds</strong>,
+                    when second place took almost three times longer. And the
+                    only one that read "minimalist" literally: 4 sections, 13
+                    KB, 2621px tall. Half of anyone else. Zero JavaScript
+                    dependencies — the hamburger menu is a one-line inline
+                    <code>onclick</code>.
+                  </p>
+
+                  <p>
+                    It has the sharpest conversion detail of the six: the
+                    official WhatsApp SVG inlined and, above all, a
+                    <strong>pre-filled message</strong> in the link
+                    (<code>wa.me/...?text=Hola%20Javastudios...</code>). Nobody
+                    else did it. That's thinking about the person who will click,
+                    not about the checklist.
+                  </p>
+
+                  <p>
+                    <strong>Its failure, and it's instructive:</strong> the
+                    animation technically exists but is invisible. The
+                    <code>.fade-up</code> classes fire
+                    <strong>on page load</strong>, with
+                    <code>:nth-child</code> delays. No
+                    <code>IntersectionObserver</code>, no scroll trigger.
+                    Everything below the fold finishes animating before you ever
+                    scroll to it.
+                  </p>
+
+                  <p>
+                    Worse: since <code>.fade-up</code> starts at
+                    <code>opacity: 0</code>, my first screenshot came out with
+                    the <code>&lt;h1&gt;</code>, the paragraph and the CTA
+                    <strong>invisible</strong> — the shot landed mid-animation.
+                    For nearly a second the hero is blank. That's a direct hit
+                    to LCP.
+                  </p>
+
+                  <p>
+                    <strong>Its great virtue, which I didn't spot until the
+                    end:</strong> it's <strong>the only one of the six that
+                    invented no business figures at all</strong>. No "500+
+                    students", no "since 2018", no pricing. I'll come back to
+                    this, because it turned out to matter more than everything
+                    else.
+                  </p>
+
+                  <p>
+                    Sloppiness: it declares
+                    <code>@keyframes fadeIn</code> and never uses it. Its own
+                    hero copy promises "voice and more" but there are only three
+                    courses. And the hamburger is a
+                    <code>&lt;div onclick&gt;</code> with no <code>role</code>,
+                    no <code>tabindex</code>, no <code>aria-expanded</code>: on
+                    mobile, a keyboard or screen-reader user
+                    <strong>cannot open the menu</strong>.
+                  </p>
+                </div>
+              </div>
+
+              <div class="model-card">
+                <div class="model-card-header">
+                  <span class="model-rank">[5]</span>
+                  <span class="model-name">Laguna S 2.1</span>
+                  <span class="model-alias">20m 48s* &middot; 29 KB &middot; 937 lines</span>
+                </div>
+                <div class="model-card-body">
+                  <div class="model-stats">
+                    <span>Height: <b>3913px</b></span>
+                    <span>Images: <b class="val-bad">1/2</b></span>
+                    <span>Scroll reveal: <b class="val-bad">no</b></span>
+                    <span>Footer year: <b class="val-bad">2024</b></span>
+                  </div>
+
+                  <figure>
+                    <img
+                      src="/assets/blog/laguna.jpg"
+                      alt="Landing page by Laguna: hero with no image, service cards, and a laptop photo in the About section"
+                      loading="lazy"
+                    />
+                    <figcaption>
+                      Laguna — hero image broken, and the only photo that loads
+                      on the whole page is a laptop.
+                    </figcaption>
+                  </figure>
+
+                  <p>
+                    Three verifiable bugs here, and one of them is the kind you
+                    don't catch by reading code.
+                  </p>
+
+                  <p><strong>Bug 1 — the typeface never loads.</strong></p>
+
+                  <pre><code>https://fonts.googleapis.com/css2=Inter:wght@300;400;500;600;700&amp;display=swap
+                                  <span class="c-bad">^ missing ?family</span></code></pre>
+
+                  <p>
+                    That URL returns <span class="val-bad">404</span>; the
+                    corrected one returns <span class="val-ok">200</span>. I
+                    checked. <strong>Inter never loads</strong> and the whole
+                    page falls back to the system sans-serif. The model designed
+                    with one typeface and shipped another — and that single
+                    missing character explains a good chunk of why it looks
+                    cheap.
+                  </p>
+
+                  <p>
+                    <strong>Bug 2 — it used an icon that doesn't exist.</strong>
+                    <code>&lt;i class="fas fa-piano"&gt;</code>. It loads Font
+                    Awesome <em>Free</em> 6.5.0 from cdnjs, but
+                    <code>fa-piano</code> is a <em>Pro</em> icon. That's why the
+                    "Piano Classes" card shows an empty blue square while
+                    guitar, voice and drums render fine. It picked 13 correct
+                    icons and failed on the one it didn't verify.
+                  </p>
+
+                  <p>
+                    <strong>Bug 3 — the worst one.</strong> It placed
+                    <strong>two images on the entire page</strong>. The hero one
+                    is a 404: the first thing a visitor sees is a grey box with
+                    the alt text <em>"Music student playing piano"</em>. And the
+                    only one that does load is
+                    <strong>a photo of two hands pointing at a laptop</strong>,
+                    on a music school landing page. It's not broken: it's
+                    wrong. Net result: zero usable images.
+                  </p>
+
+                  <p>
+                    <strong>Where I was wrong, and credit where it's due:</strong>
+                    I assumed its contact form was a dead form with no backend.
+                    It isn't. It calls <code>e.preventDefault()</code>, builds
+                    the message and opens <code>wa.me</code> with the encoded
+                    text. It turns a form into a WhatsApp channel with no
+                    server. It's the most elegant solution to requirement 4 in
+                    the whole batch.
+                  </p>
+
+                  <p>
+                    Oh, and the footer says <code>&copy; 2024</code>. Two years
+                    behind, when DeepSeek got 2026 right unprompted.
+                  </p>
+                </div>
+              </div>
+
+              <div class="model-card">
+                <div class="model-card-header">
+                  <span class="model-rank">[6]</span>
+                  <span class="model-name">North Mini Code</span>
+                  <span class="model-alias">4m 17s &middot; 26 KB &middot; 803 lines</span>
+                </div>
+                <div class="model-card-body">
+                  <div class="model-stats">
+                    <span>Height: <b>4814px</b></span>
+                    <span>Images: <b class="val-bad">0/6</b></span>
+                    <span>Scroll reveal: <b class="val-bad">no</b></span>
+                    <span>Footer year: <b class="val-bad">2024</b></span>
+                  </div>
+
+                  <figure>
+                    <img
+                      src="/assets/blog/north.jpg"
+                      alt="Landing page by North: Photo Gallery section showing six empty rectangles with only alt text"
+                      loading="lazy"
+                    />
+                    <figcaption>
+                      North — the section is still called "Photo Gallery". Those
+                      are six empty rectangles.
+                    </figcaption>
+                  </figure>
+
+                  <p>
+                    Nine <code>&lt;img&gt;</code> tags over six unique URLs. I
+                    checked each one, first with <code>HEAD</code> and then with
+                    <code>GET</code> to rule out false positives:
+                  </p>
+
+                  <pre><code><span class="c-bad">404</span>  photo-1494487041770-7a98d0a0c51d
+<span class="c-bad">404</span>  photo-1511671782779-cfe11cab67eb
+<span class="c-bad">404</span>  photo-1519669556163-dea1aeec3e26
+<span class="c-bad">404</span>  photo-1520523839899-80a6bb11b6fd
+<span class="c-bad">404</span>  photo-1522201190528-6a4c8f8c5e5b
+<span class="c-bad">404</span>  photo-1598622886178-3ba0df9d1b69
+
+<span class="c-dim">control (real ID from another model):</span>
+<span class="c-ok">200</span>  photo-1511379938547-c1f69419868d  <span class="c-dim">(32 KB)</span></code></pre>
+
+                  <p>
+                    <strong>Six out of six. Zero hits.</strong> The network
+                    didn't fail: it invented all six identifiers. And since it's
+                    the only model that put no image in the hero, the result is
+                    that <strong>the page has not a single image on it</strong>.
+                    Requirement 6 isn't half-met: it's at zero.
+                  </p>
+
+                  <div class="callout warn">
+                    <span class="callout-label">THE MOST SERIOUS FAILURE, AND IT'S NOT VISUAL</span>
+                    <pre style="margin-bottom: 10px"><code>console.log('Form submitted:', formData);
+alert('¡Gracias por tu mensaje! Te contactaremos pronto.');
+this.reset();</code></pre>
+                    <p>
+                      The contact form asks for name, email, phone, course of
+                      interest and message… and dumps it to the console. It
+                      <strong>tells the user "we'll contact you soon"</strong>
+                      and clears the form. It's an executable lie: every lead
+                      comes in, vanishes silently, and the person waits for a
+                      call that will never come.
+                    </p>
+                    <p>
+                      Compare that with Laguna, which under the same constraints
+                      routed its form to <code>wa.me</code>. Same problem, one
+                      honest solution and one that isn't.
+                    </p>
+                  </div>
+
+                  <p>
+                    And here's the uncomfortable part: North is the
+                    <strong>third slowest</strong> and produced 803 lines of
+                    HTML that, <em>read on the page</em>, look perfectly
+                    correct. Nothing in the code betrays the six dead images or
+                    the lying form. They only surface when you open a browser
+                    and make real HTTP requests.
+                  </p>
+                </div>
+              </div>
+
+              <hr />
+
+              <h2>The three patterns that run through everything</h2>
+
+              <p>
+                Individual results are anecdotes. What repeats across all six is
+                what actually matters.
+              </p>
+
+              <h3>1. Five of six invented business statistics</h3>
+
+              <p>
+                I never gave a phone number, pricing, years in business or
+                student count. Here's what showed up anyway — counted by hand
+                across all six files:
+              </p>
+
+              <ul>
+                <li><strong>"500+ students"</strong> — Ling, Laguna, MiMo and Big Pickle</li>
+                <li>
+                  <strong>"Since 2018"</strong> — Ling, North, MiMo and Big
+                  Pickle. Laguna went with <strong>"since 2014"</strong>
+                </li>
+                <li><strong>"15+ teachers"</strong>, <strong>"8 years"</strong>, <strong>"10+ years of experience"</strong></li>
+                <li>Concrete COP pricing — Ling ($150,000 / $280,000 / $450,000) and North ($150,000 / $170,000 / $180,000)</li>
+                <li>Opening hours, testimonials signed with full names, "quarterly recital"</li>
+              </ul>
+
+              <p>
+                <strong>The exception, and it deserves credit: DeepSeek.</strong>
+                It's the only one of the six that fabricated not a single
+                figure. No students, no years, no pricing, no teachers. It stuck
+                to copy that asserts nothing verifiable. The only thing it made
+                up was an offer — <em>"free trial class"</em> — which is still a
+                commitment nobody authorized, but it's light years away from
+                crediting a business with 500 students it doesn't have.
+              </p>
+
+              <p>
+                One point in everyone's favor, though: all six used the same
+                phone number, <code>+57 300 123 4567</code>. That's a
+                transparent placeholder — nobody's mistaking it for a real
+                number. There they flagged the gap instead of papering over it,
+                which is exactly what they should have done with the rest.
+              </p>
+
+              <div class="callout warn">
+                <span class="callout-label">THIS IS THE REAL RISK</span>
+                <p>
+                  No "met/didn't meet the 6 requirements" checklist catches
+                  this. And if a client publishes that page as-is, they're
+                  running <strong>false advertising</strong> — which in Colombia
+                  falls under the SIC. The testimonials are worse still: they're
+                  quotes attributed to named people who don't exist.
+                </p>
+                <p>
+                  The dangerous part isn't the model getting CSS wrong. It's
+                  that it fills the gaps with false claims
+                  <strong>written with total confidence</strong>, and that
+                  reviewing for it means reading every sentence asking "was I
+                  told this, or did it make it up?"
+                </p>
+              </div>
+
+              <h3>2. Half of them failed the animation for the same reason</h3>
+
+              <p>
+                Three of six (DeepSeek, Laguna, North) implemented
+                <code>@keyframes</code> that fire on page load, with no
+                <code>IntersectionObserver</code>. The result is identical in
+                all three: everything below the fold finishes animating before
+                the user scrolls that far.
+              </p>
+
+              <p>
+                <strong>They satisfy the letter of requirement 3 and not its
+                intent.</strong> Review the code and there's animation. Open the
+                page and you never see it. The other three (Big Pickle, MiMo,
+                Ling) did use <code>IntersectionObserver</code>, and the
+                difference while scrolling is enormous.
+              </p>
+
+              <h3>3. Every one broke the "blue colors" requirement at the same spot</h3>
+
+              <p>
+                Every model that added a prominent WhatsApp button made it
+                <strong>green</strong>. It breaks requirement 1 and it's almost
+                certainly the right call: WhatsApp green is instant brand
+                recognition. It's the one case in this experiment where
+                disobeying the brief improves the outcome.
+              </p>
+
+              <hr />
+
+              <h2>The finding I didn't expect: how images get hallucinated</h2>
+
+              <p>
+                Once I saw North had all six images broken, I cross-referenced
+                every Unsplash ID across all six models. There are
+                <strong>30 unique IDs</strong> total, and the pattern is
+                remarkably clean:
+              </p>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="wrap">Kind of ID</th>
+                      <th>Count</th>
+                      <th>Broken</th>
+                      <th>Failure rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="wrap">
+                        Picked independently by
+                        <strong>2 or 3 models</strong>
+                      </td>
+                      <td>7</td>
+                      <td><span class="val-ok">0</span></td>
+                      <td><span class="val-ok">0%</span></td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Used by <strong>a single model</strong></td>
+                      <td>23</td>
+                      <td><span class="val-bad">11</span></td>
+                      <td><span class="val-bad">48%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p>
+                <strong>All seven shared IDs work. No exceptions.</strong> And
+                nearly half of the ones that appear only once are dead.
+              </p>
+
+              <p>
+                The most telling case is MiMo and Big Pickle, which picked
+                <em>the same photo</em>:
+              </p>
+
+              <pre><code>MiMo        photo-1598488035139-bdbb2231cb64   <span class="c-bad">404</span>
+Big Pickle  photo-1598488035139-bdbb2231ce04   <span class="c-ok">200</span>
+                        <span class="c-dim">same prefix ^   ^ hallucinated suffix</span></code></pre>
+
+              <p>
+                That exposes the mechanism: models
+                <strong>memorize the stable part of the ID — the timestamp —
+                and hallucinate the trailing hash</strong>. The IDs several
+                models share are the ones genuinely in the training data: the
+                viral Unsplash photos, seen thousands of times. The ones that
+                appear only once are, half the time, pure invention with the
+                right shape.
+              </p>
+
+              <div class="callout">
+                <span class="callout-label">PRACTICAL HEURISTIC</span>
+                <p>
+                  If a model hands you an Unsplash URL,
+                  <strong>always verify it</strong>. And if two different models
+                  hand you the same one, it's almost certainly real. It's a
+                  cheap form of self-validation: ask two models for images and
+                  keep the intersection.
+                </p>
+              </div>
+
+              <hr />
+
+              <h2>Final table</h2>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Model</th>
+                      <th>Time</th>
+                      <th>Size</th>
+                      <th>Height</th>
+                      <th>Imgs OK</th>
+                      <th>Reveal</th>
+                      <th>Year</th>
+                      <th class="wrap">Verdict</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td><strong>Big Pickle</strong></td>
+                      <td>2m 05s</td>
+                      <td>26 KB</td>
+                      <td>4365px</td>
+                      <td><span class="val-ok">10/11</span></td>
+                      <td><span class="val-ok">yes</span></td>
+                      <td><span class="val-ok">2026</span></td>
+                      <td class="wrap">Complete and compact</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td><strong>MiMo v2.5</strong></td>
+                      <td>1m 53s</td>
+                      <td>24 KB</td>
+                      <td>4875px</td>
+                      <td><span class="val-ok">10/11</span></td>
+                      <td><span class="val-ok">yes</span></td>
+                      <td><span class="val-ok">2026</span></td>
+                      <td class="wrap">Technical tie</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td><strong>Ling 3.0 Flash</strong></td>
+                      <td>2m 17s</td>
+                      <td>34 KB</td>
+                      <td>4964px</td>
+                      <td><span class="val-ok">6/7</span></td>
+                      <td><span class="val-ok">yes</span></td>
+                      <td><span class="val-ok">2026</span></td>
+                      <td class="wrap">Most commercial</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td><strong>DeepSeek V4 Flash</strong></td>
+                      <td><span class="val-ok">42s</span></td>
+                      <td><span class="val-ok">13 KB</span></td>
+                      <td><span class="val-ok">2621px</span></td>
+                      <td>3/4</td>
+                      <td><span class="val-bad">no</span></td>
+                      <td><span class="val-ok">2026</span></td>
+                      <td class="wrap">The real minimalist</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td><strong>Laguna S 2.1</strong></td>
+                      <td><span class="val-warn">20m 48s*</span></td>
+                      <td>29 KB</td>
+                      <td>3913px</td>
+                      <td><span class="val-bad">1/2</span></td>
+                      <td><span class="val-bad">no</span></td>
+                      <td><span class="val-bad">2024</span></td>
+                      <td class="wrap">404 font, Pro icon, laptop photo</td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td><strong>North Mini Code</strong></td>
+                      <td>4m 17s</td>
+                      <td>26 KB</td>
+                      <td>4814px</td>
+                      <td><span class="val-bad">0/6</span></td>
+                      <td><span class="val-bad">no</span></td>
+                      <td><span class="val-bad">2024</span></td>
+                      <td class="wrap">Zero images, a form that lies</td>
+                    </tr>
+                    <tr>
+                      <td>—</td>
+                      <td><strong>Nemotron 3 Ultra</strong></td>
+                      <td colspan="7" class="wrap">
+                        <span class="val-bad">Streaming response failed</span> —
+                        did not deliver
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2>What I take away</h2>
+
+              <p>
+                <strong>Yes, opencode's free models are usable.</strong> Three
+                of seven shipped something a freelancer could adjust and invoice
+                the same day. For prototyping, for kicking off a project, for
+                having something to show a client in two minutes: perfectly
+                serviceable.
+              </p>
+
+              <p>
+                But the experiment left me three things more useful than the
+                ranking:
+              </p>
+
+              <p>
+                <strong>One: speed and quality don't correlate.</strong> The
+                fastest (DeepSeek, 42s) came fourth. The second slowest (North,
+                4m17s) came last. And the one that cost me the most time
+                (Laguna, 20 minutes) came second to last. Waiting longer buys
+                you nothing.
+              </p>
+
+              <p>
+                <strong>Two: reviewing the code isn't enough.</strong> This is
+                the lesson I actually walk away with. North's six dead images,
+                Laguna's 404 font, its nonexistent Pro icon and the form that
+                lies to the user: <em>none</em> of those failures are visible in
+                the HTML. All of them have impeccable syntax. They appear on
+                render and on HTTP requests. If your validation process ends at
+                "I read the diff and it looks fine", you're going to ship broken
+                pages.
+              </p>
+
+              <p>
+                <strong>Three: data hallucination is the serious
+                problem.</strong> Five of six invented business figures with
+                total confidence. A broken link you can see; a fake
+                <em>"500+ satisfied students"</em> ships to production without
+                anyone blinking. And unlike CSS, that mistake has legal
+                consequences for your client. That DeepSeek — the fastest and
+                simplest model — was the only one to abstain suggests this isn't
+                a technical limitation but a training decision.
+              </p>
+
+              <p>
+                One last note, and it's the one that gives me the most pause:
+                <strong>all of this is fixable with scaffolding</strong>. A
+                skill that forces URL verification. An MCP that queries the real
+                Unsplash API. An instruction that forbids inventing data that
+                wasn't provided. A spec-driven step that locks the section
+                inventory before a line gets written.
+              </p>
+
+              <p>
+                None of that was here, and that was the point. This test
+                measures the floor. The conclusion is that
+                <strong>the floor of free models is surprisingly high on markup
+                and surprisingly low on truthfulness</strong> — and that the
+                difference between a usable result and a dangerous one isn't set
+                by the model. You set it, with what you build around it.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="prompt">~$</span>
+            <span class="command">cd ..</span>
+          </div>
+          <div class="section-content">
+            <div class="post-nav">
+              <a href="/en/#blog">back to blog</a>
+              <a href="/en/#contact" class="fwd">let's talk</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="terminal-footer">
+        <div class="footer-content">
+          <span>&copy; 2026 Brandon Sanchez</span>
+          <span class="separator">|</span>
+          <a href="https://github.com/bssanchez" target="_blank" rel="noopener"
+            >github</a
+          >
+          <span class="separator">&middot;</span>
+          <a
+            href="https://www.linkedin.com/in/bssanchez93/"
+            target="_blank"
+            rel="noopener"
+            >linkedin</a
+          >
+          <span class="separator">|</span>
+          <span>Published: <time datetime="2026-07-28">2026-07-28</time></span>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/script.js"></script>
+  </body>
+</html>
