@@ -502,6 +502,100 @@ button:focus {
     outline-offset: 2px;
 }
 
+/* Easter egg: kernel panic */
+
+body.panic-active {
+    overflow: hidden;
+}
+
+.kernel-panic {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 24px;
+    background-color: #000;
+    color: #33ff66;
+    font-family: 'Cascadia Code','Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.45;
+    text-shadow: 0 0 6px rgba(51, 255, 102, 0.55);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.kernel-panic.is-visible {
+    opacity: 1;
+}
+
+.kernel-panic__scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0) 0,
+            rgba(0, 0, 0, 0) 2px,
+            rgba(0, 0, 0, 0.35) 2px,
+            rgba(0, 0, 0, 0.35) 4px
+        ),
+        radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.75) 100%);
+    animation: crt-flicker 3s infinite;
+}
+
+.kernel-panic__log {
+    flex: 0 1 auto;
+    margin: 0;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font: inherit;
+    color: inherit;
+}
+
+.kernel-panic__prompt {
+    flex-shrink: 0;
+    padding-top: 12px;
+}
+
+.kernel-panic__prompt .cursor-blink {
+    color: #33ff66;
+}
+
+@keyframes crt-flicker {
+    0%, 46%, 50%, 91%, 94%, 100% { opacity: 1; }
+    48% { opacity: 0.82; }
+    92.5% { opacity: 0.88; }
+}
+
+@media (max-width: 768px) {
+    .kernel-panic {
+        padding: 16px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .kernel-panic {
+        padding: 12px;
+        font-size: 9px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .kernel-panic {
+        transition: none;
+        opacity: 1;
+    }
+
+    .kernel-panic__scanlines {
+        animation: none;
+    }
+}
+
 @media print {
     body {
         background-color: white;
@@ -509,7 +603,8 @@ button:focus {
     }
 
     .terminal-controls,
-    .cursor-blink {
+    .cursor-blink,
+    .kernel-panic {
         display: none;
     }
 

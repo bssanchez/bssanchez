@@ -15,6 +15,54 @@
         THEME: 'portfolio_theme'
     };
 
+    const PANIC_DUMP = [
+        '[   42.133700] BUG: unable to handle page fault for address: 00000000deadbeef',
+        '[   42.133701] #PF: supervisor read access in kernel mode',
+        '[   42.133702] #PF: error_code(0x0000) - not-present page',
+        '[   42.133703] PGD 0 P4D 0',
+        '[   42.133704] Oops: 0000 [#1] SMP PTI',
+        '[   42.133705] CPU: 1 PID: 1337 Comm: recruiter Tainted: G    B D W  O  6.9.3-codesan #1',
+        '[   42.133706] Hardware name: CODESAN Terminal Portfolio/BSANCHEZ-DEV, BIOS 4.0.4 07/28/2026',
+        '[   42.133707] RIP: 0010:konami_handler+0x1337/0x2000 [easter_egg]',
+        '[   42.133708] Code: 55 48 89 e5 41 57 41 56 <ff> ff ff ff 90 90 cc cc 0f 0b eb fe',
+        '[   42.133709] RSP: 0018:ffffb00dcafe0000 EFLAGS: 00010246',
+        '[   42.133710] RAX: 00000000deadbeef RBX: 0000000000000000 RCX: 0000000000c0ffee',
+        '[   42.133711] RDX: 0000000000000539 RSI: ffff8b1ee5000000 RDI: 00000000000f4240',
+        '',
+        '[   42.133712] Modules linked in: codesan_portfolio(O) easter_egg(O) coffee_driver(O)',
+        '[   42.133713]                    imposter_syndrome(E) dark_mode(O) semicolon_missing(F)',
+        '[   42.133714]                    works_on_my_machine(OE) [last unloaded: sleep_schedule]',
+        '',
+        '[   42.133715] Call Trace:',
+        '[   42.133716]  <TASK>',
+        '[   42.133717]  konami_handler+0x1337/0x2000 [easter_egg]',
+        '[   42.133718]  up_up_down_down+0x2a/0x40 [easter_egg]',
+        '[   42.133719]  left_right_left_right+0x0b/0xa0 [easter_egg]',
+        '[   42.133720]  b_a_start+0x99/0x100 [easter_egg]',
+        '[   42.133721]  handle_keydown+0x7c/0xf0 [codesan_portfolio]',
+        '[   42.133722]  do_syscall_64+0x5c/0x90',
+        '[   42.133723]  entry_SYSCALL_64_after_hwframe+0x76/0x7e',
+        '[   42.133724]  </TASK>',
+        '',
+        '[   42.133725] CR2: 00000000deadbeef',
+        '[   42.133726] ---[ end trace 0000000000001337 ]---',
+        '[   42.133727] note: recruiter[1337] exited with preempt_count 1',
+        '',
+        '[   42.133728] Kernel panic - not syncing: Attempted to hire init!',
+        '[   42.133729] Kernel Offset: disabled',
+        '[   42.133730] ---[ end Kernel panic - not syncing: Attempted to hire init! ]---'
+    ];
+
+    const BOOT_DUMP = [
+        '[    0.000000] Linux version 6.9.3-codesan (bsanchez@codesan.dev)',
+        '[    0.000412] Rebooting portfolio...',
+        '[    0.104512] systemd[1]: Starting curiosity.service...',
+        '[    0.187330] coffee_driver: refill detected, resuming',
+        '[    0.238910] portfolio: all modules loaded. Welcome back.'
+    ];
+
+    let panicActive = false;
+
     function init() {
         loadPreferences();
         attachEventListeners();
@@ -155,34 +203,142 @@
         let konamiIndex = 0;
 
         document.addEventListener('keydown', (e) => {
+            if (panicActive) return;
+
             if (e.key === konamiCode[konamiIndex]) {
                 konamiIndex++;
                 if (konamiIndex === konamiCode.length) {
-                    activateEasterEgg();
                     konamiIndex = 0;
+                    activateEasterEgg();
                 }
             } else {
-                konamiIndex = 0;
+                konamiIndex = e.key === konamiCode[0] ? 1 : 0;
             }
         });
     }
 
     function activateEasterEgg() {
-        const originalBg = elements.body.style.backgroundColor;
-        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-        let colorIndex = 0;
-        
-        const interval = setInterval(() => {
-            elements.body.style.transition = 'background-color 0.1s';
-            elements.body.style.backgroundColor = colors[colorIndex % colors.length];
-            colorIndex++;
-            
-            if (colorIndex > 20) {
-                clearInterval(interval);
-                elements.body.style.backgroundColor = originalBg;
-                elements.body.style.transition = 'background-color 0.3s ease';
+        if (panicActive) return;
+        panicActive = true;
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const previousFocus = document.activeElement;
+        const timers = [];
+
+        const overlay = document.createElement('div');
+        overlay.className = 'kernel-panic';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-label', 'Kernel panic');
+        overlay.setAttribute('tabindex', '-1');
+
+        const scanlines = document.createElement('div');
+        scanlines.className = 'kernel-panic__scanlines';
+        scanlines.setAttribute('aria-hidden', 'true');
+
+        const log = document.createElement('pre');
+        log.className = 'kernel-panic__log';
+
+        const prompt = document.createElement('div');
+        prompt.className = 'kernel-panic__prompt';
+        prompt.style.visibility = 'hidden';
+        prompt.appendChild(document.createTextNode('Press any key to reboot... '));
+
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor-blink';
+        cursor.textContent = '█';
+        prompt.appendChild(cursor);
+
+        overlay.appendChild(scanlines);
+        overlay.appendChild(log);
+        overlay.appendChild(prompt);
+
+        elements.body.appendChild(overlay);
+        elements.body.classList.add('panic-active');
+        overlay.focus();
+
+        requestAnimationFrame(() => overlay.classList.add('is-visible'));
+
+        function after(delay, fn) {
+            timers.push(setTimeout(fn, delay));
+        }
+
+        function print(line) {
+            log.appendChild(document.createTextNode(line + '\n'));
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function typeLines(lines, speed, onDone) {
+            if (reduceMotion) {
+                lines.forEach(print);
+                after(0, onDone);
+                return;
             }
-        }, 100);
+
+            let elapsed = 0;
+            lines.forEach((line) => {
+                elapsed += line === '' ? speed * 3 : speed;
+                after(elapsed, () => print(line));
+            });
+            after(elapsed + speed * 2, onDone);
+        }
+
+        const DISMISS_EVENTS = ['keydown', 'click', 'touchstart'];
+        const DISMISS_OPTIONS = { capture: true, passive: false };
+
+        function armDismiss() {
+            DISMISS_EVENTS.forEach(type => document.addEventListener(type, dismiss, DISMISS_OPTIONS));
+        }
+
+        function disarmDismiss() {
+            DISMISS_EVENTS.forEach(type => document.removeEventListener(type, dismiss, DISMISS_OPTIONS));
+        }
+
+        function destroy() {
+            timers.forEach(clearTimeout);
+            timers.length = 0;
+            disarmDismiss();
+            overlay.remove();
+            elements.body.classList.remove('panic-active');
+            panicActive = false;
+
+            if (previousFocus && typeof previousFocus.focus === 'function') {
+                previousFocus.focus();
+            }
+        }
+
+        let rebooting = false;
+
+        function reboot() {
+            if (rebooting) return;
+            rebooting = true;
+
+            timers.forEach(clearTimeout);
+            timers.length = 0;
+            disarmDismiss();
+
+            log.textContent = '';
+            prompt.style.visibility = 'hidden';
+
+            typeLines(BOOT_DUMP, 180, () => {
+                after(500, () => {
+                    overlay.classList.remove('is-visible');
+                    after(200, destroy);
+                });
+            });
+        }
+
+        function dismiss(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            reboot();
+        }
+
+        typeLines(PANIC_DUMP, 55, () => {
+            prompt.style.visibility = 'visible';
+            armDismiss();
+            after(15000, reboot);
+        });
 
         console.log('🎮 Konami Code activated! You found the easter egg!');
     }
