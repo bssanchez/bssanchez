@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="For months nobody could say for sure what was in QA. The fix wasn't more discipline: it was to stop treating QA as a branch and start treating it as a recipe in a plain text file."
+    />
+    <meta
+      name="keywords"
+      content="git, ci/cd, github actions, qa, environments, trunk based development, devops, branching"
+    />
+    <meta name="author" content="Brandon Sanchez" />
+    <title>
+      QA stopped being a branch: the test environment as a text file | Brandon
+      Sanchez
+    </title>
+
+    <link rel="canonical" href="https://codesan.dev/en/blog/qa-disposable-composition" />
+    <link rel="alternate" hreflang="es" href="https://codesan.dev/blog/qa-composicion-desechable" />
+    <link rel="alternate" hreflang="en" href="https://codesan.dev/en/blog/qa-disposable-composition" />
+    <link rel="alternate" hreflang="x-default" href="https://codesan.dev/blog/qa-composicion-desechable" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="codesan.dev" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_CO" />
+    <meta property="og:url" content="https://codesan.dev/en/blog/qa-disposable-composition" />
+    <meta
+      property="og:title"
+      content="QA stopped being a branch: the test environment as a text file"
+    />
+    <meta
+      property="og:description"
+      content="main had stopped being production and nobody knew what was in QA. The fix wasn't more discipline: it was making the environment disposable and rebuilding it from scratch on every push."
+    />
+    <meta
+      property="og:image"
+      content="https://codesan.dev/assets/og/qa-en.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Terminal running the command: cat qa-disposable-composition.md"
+    />
+    <meta property="article:published_time" content="2026-10-19" />
+    <meta property="article:author" content="Brandon Sanchez" />
+    <meta property="article:tag" content="git" />
+    <meta property="article:tag" content="CI/CD" />
+    <meta property="article:tag" content="DevOps" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="QA stopped being a branch: the test environment as a text file"
+    />
+    <meta
+      name="twitter:description"
+      content="main had stopped being production and nobody knew what was in QA. The fix was making the environment disposable and rebuilding it from scratch on every push."
+    />
+    <meta
+      name="twitter:image"
+      content="https://codesan.dev/assets/og/qa-en.png"
+    />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#1e1e2e" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "QA stopped being a branch: the test environment as a text file",
+        "description": "For months nobody could say for sure what was in QA. The fix wasn't more discipline: it was to stop treating QA as a branch and start treating it as a recipe in a plain text file.",
+        "inLanguage": "en",
+        "datePublished": "2026-10-19",
+        "dateModified": "2026-10-19",
+        "image": "https://codesan.dev/assets/og/qa-en.png",
+        "author": {
+          "@type": "Person",
+          "name": "Brandon Sanchez",
+          "url": "https://codesan.dev/"
+        },
+        "publisher": {
+          "@type": "Person",
+          "name": "Brandon Sanchez",
+          "url": "https://codesan.dev/"
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://codesan.dev/en/blog/qa-disposable-composition"
+        }
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/blog.css" />
+  </head>
+  <body data-lang="en">
+    <div class="container">
+      <header class="terminal-header">
+        <div class="terminal-title">
+          <span class="prompt">bsanchez@codesan.dev:~/blog$</span>
+          <span class="cursor-blink">_</span>
+        </div>
+        <div class="terminal-controls">
+          <a
+            href="/blog/qa-composicion-desechable.html"
+            class="control-btn"
+            aria-label="Cambiar a Español"
+          >
+            <span class="lang-indicator">ES</span>
+          </a>
+          <button id="themeToggle" class="control-btn" aria-label="Toggle Theme">
+            <span class="theme-icon">◐</span>
+          </button>
+        </div>
+      </header>
+
+      <nav class="terminal-nav">
+        <ul>
+          <li><a href="/en/">home</a></li>
+          <li><a href="/en/#about">about</a></li>
+          <li><a href="/en/#blog">blog</a></li>
+          <li><a href="/en/#contact">contact</a></li>
+        </ul>
+      </nav>
+
+      <main class="terminal-content">
+        <article class="section">
+          <div class="section-header">
+            <span class="prompt">~$</span>
+            <span class="command">cat qa-disposable-composition.md</span>
+          </div>
+          <div class="section-content">
+            <div class="post-meta">
+              <span><span class="meta-key">date:</span> 2026-10-19</span>
+              <span><span class="meta-key">read:</span> ~10 min</span>
+              <span
+                ><span class="meta-key">tags:</span> git, ci/cd, devops</span
+              >
+            </div>
+
+            <div class="post-body">
+              <h1 style="font-size: 19px; margin-bottom: 18px">
+                QA stopped being a branch: the test environment as a text file
+              </h1>
+
+              <p>
+                I joined a project where the question <em>"what's in QA right
+                now?"</em> had no answer. Not a partial answer:
+                <strong>no answer</strong>. You had to read the history of a
+                branch with hundreds of merges and guess.
+              </p>
+
+              <p>
+                What follows is how we got out of that. Spoiler on the
+                counterintuitive part: the fix wasn't more discipline, or a
+                process doc, or a better maintained board.
+                <strong>It was taking away QA's ability to be a
+                branch.</strong>
+              </p>
+
+              <h2>The symptom: main had stopped being production</h2>
+
+              <p>
+                The context, in the parts that matter for the problem: a web
+                application with a team of several people, frequent releases,
+                and a client who signs off on changes before they ship. Three
+                environments: production, a QA the client looks at, and
+                everyone's own branches.
+              </p>
+
+              <p>
+                The setup was the usual one, the one we've all used: a
+                long-lived <code>qa</code> branch. You merge your
+                feature there, the client reviews it, and once they approve you
+                merge it into <code>main</code>. Simple, and perfectly
+                reasonable.
+              </p>
+
+              <p>
+                Except that after a year, the real inventory looked like this:
+              </p>
+
+              <ul>
+                <li>
+                  Approved features that had been sitting in QA for
+                  <strong>six months</strong> without reaching production,
+                  because the client signed off and nobody closed the loop.
+                </li>
+                <li>
+                  <em>Rejected</em> features still in QA, because pulling one
+                  out meant reverting a merge buried under fifty others.
+                </li>
+                <li>
+                  Conflicts between two features resolved <em>inside</em> QA.
+                  That resolution existed nowhere else: not reviewed, not in any
+                  PR, and not going to reach production with the features.
+                </li>
+                <li>
+                  And the one that made it urgent:
+                  <strong><code>main</code> was no longer
+                  production</strong>. Things that were live weren't in
+                  <code>main</code>, and things in <code>main</code> weren't
+                  deployed. We had to revert <code>main</code> to the stable
+                  state from two weeks earlier just to get a trustworthy
+                  reference back.
+                </li>
+              </ul>
+
+              <div class="callout warn">
+                <span class="callout-label">THE REAL COST</span>
+                <p>
+                  Once <code>main</code> stops equalling production, you lose
+                  the ability to answer the only question that matters during an
+                  incident: <strong>what is running right now?</strong>
+                  Everything else — rollbacks, hotfixes, auditing — is built on
+                  top of that answer. Without it, every deploy is a bet.
+                </p>
+              </div>
+
+              <h2>Why it happened: a long-lived branch is a log, not a state</h2>
+
+              <p>
+                It took me a while to see this wasn't a problem of careless
+                people. It was structural, and it comes down to one sentence:
+              </p>
+
+              <p>
+                <strong>A long-lived branch records decisions; it doesn't
+                represent a state.</strong> Every merge into QA is a line
+                appended to a write-only log. The branch doesn't say "these five
+                features are under test": it says "this is what happened, in
+                this order, over fourteen months". To know the current state you
+                have to <em>mentally replay the whole log</em>.
+              </p>
+
+              <p>
+                Everything else falls out of that. Pulling a feature out of QA
+                is expensive — you have to revert a buried commit — so nobody
+                does it, so QA only grows. And once it only grows, drifting from
+                production stops being an accident: it's the design's default
+                behavior.
+              </p>
+
+              <p>
+                Seen that way, asking the team for discipline was asking them to
+                manually compensate for a system that pushed the other way. That
+                never wins.
+              </p>
+
+              <h2>The inversion: QA isn't merged into, it's rebuilt</h2>
+
+              <p>
+                The underlying change is a single sentence:
+              </p>
+
+              <div class="callout">
+                <span class="callout-label">THE RULE THAT CHANGES EVERYTHING</span>
+                <p>
+                  The QA branch is <strong>disposable</strong>. You never push
+                  to it. On every change it is
+                  <strong>rebuilt from scratch</strong> as <code>main</code>
+                  plus the merge of a list of branches. Anything committed there
+                  is lost, by design.
+                </p>
+              </div>
+
+              <p>
+                The entire algorithm fits in five lines:
+              </p>
+
+              <pre><code><span class="c-dim"># rebuild QA (in a temporary worktree, not in your checkout)</span>
+git switch --detach origin/main
+<span class="c-dim">for each branch in the list:</span>
+    git merge --no-ff origin/$branch
+git push --force origin HEAD:qa</code></pre>
+
+              <p>
+                It looks violent and it's the exact opposite: it's what makes QA
+                <em>cheap</em>. Look at what just happened to the problems
+                above:
+              </p>
+
+              <ul>
+                <li>
+                  <strong>Pulling a feature out of QA</strong> is no longer
+                  reverting a merge. It's deleting a line from a list. The next
+                  rebuild simply doesn't include it.
+                </li>
+                <li>
+                  <strong>QA cannot drift from production.</strong> It starts
+                  from <code>origin/main</code> every single time. Drift is
+                  mathematically impossible, not "discouraged".
+                </li>
+                <li>
+                  <strong>QA's inventory is the list.</strong> The question that
+                  had no answer is now a <code>cat</code>.
+                </li>
+                <li>
+                  <strong><code>main</code> goes back to being
+                  production</strong>, because nothing is merged "toward" QA
+                  anymore: QA is derived from <code>main</code>, never the other
+                  way around.
+                </li>
+              </ul>
+
+              <h2>The list lives in git, and that's not a detail</h2>
+
+              <p>
+                My first draft stored the list in repository variables, editable
+                from the UI. I dropped it for something that turned out to be
+                the best decision in the design:
+                <strong>a list you edit from a UI has no history</strong>. You
+                don't know who added that feature, when, or why. And if the QA
+                environment breaks, you can't <code>git log</code> the cause.
+              </p>
+
+              <p>
+                So the list is a plain text file on an
+                <strong>orphan branch</strong> — no shared history with
+                <code>main</code>, not a single line of product code. One file
+                per environment, named after the environment:
+              </p>
+
+              <div class="prompt-box">
+                <div class="prompt-box-header">compose-config:qa</div>
+                <div class="prompt-box-body">
+                  <p># Client QA. One branch per line.</p>
+                  <p>
+                    integration/checkout+catalog<br />
+                    feature/csv-reports<br />
+                    feature/flaky@a1b2c3d&nbsp;&nbsp;# pinned to a commit
+                  </p>
+                </div>
+              </div>
+
+              <p>
+                The format explains itself, which was the point. One branch per
+                line, <code>#</code> for comments, blank lines ignored. Two
+                decisions worth justifying:
+              </p>
+
+              <p>
+                <strong>A file with no entries means free environment</strong>,
+                and resets the branch to <code>main</code>. Freeing an
+                environment is deleting lines, not a special command. The
+                "empty" state is representable, which is exactly what the old
+                setup was missing.
+              </p>
+
+              <p>
+                <strong>The <code>@sha</code> pin freezes a feature at a
+                commit.</strong> It came out of a very concrete case: a flaky
+                branch we wanted in QA but whose pushes kept breaking the
+                environment for everyone else. With the pin, a push to that
+                branch does <em>not</em> trigger a rebuild.
+              </p>
+
+              <p>
+                And because the list is git, <strong>the trigger is the
+                push</strong>. No button, no cron, no sync that can fall behind.
+                Editing the file without pushing does nothing, and that's good:
+                the only moment the environment changes is an auditable event
+                with an author and a date.
+              </p>
+
+              <h2>Features that clash don't get fixed in QA</h2>
+
+              <p>
+                There's one case the old setup handled badly and that deserves
+                its own rule: two features that conflict with each other.
+              </p>
+
+              <p>
+                It used to be resolved inside QA, and we've seen the result: the
+                resolution lives on a disposable branch, unreviewed, and never
+                reaches production. Under the new setup it isn't even possible —
+                the rebuild would fail at the <code>merge</code> and stop.
+              </p>
+
+              <p>
+                The rule is: the conflict is resolved on an
+                <code>integration/a+b</code> branch, and <strong>that</strong>
+                branch is listed in QA <em>instead of</em> the two that clash.
+              </p>
+
+              <pre><code><span class="c-bad"># wrong: the rebuild fails</span>
+feature/checkout
+feature/catalog
+
+<span class="c-ok"># right: the conflict arrives resolved, and reviewable</span>
+integration/checkout+catalog</code></pre>
+
+              <p>
+                The deeper benefit is that <strong>the conflict resolution
+                becomes a first-class artifact</strong>: it has a branch, an
+                author, a diff, it can be reviewed in a PR, and it reaches
+                production together with the features. It stops being an
+                anonymous merge commit inside a branch that's about to be
+                deleted.
+              </p>
+
+              <hr />
+
+              <h2>Four things that weren't obvious</h2>
+
+              <p>
+                The design is simple. Implementing it came with four surprises
+                that cost me real time, and they're the part of this article I'd
+                most have liked to read beforehand.
+              </p>
+
+              <h3>1. A push runs the workflows of the branch that was pushed</h3>
+
+              <p>
+                The first push to the list branch triggered
+                <strong>zero</strong> runs. It didn't fail: nothing happened.
+              </p>
+
+              <p>
+                The reason, obvious in hindsight: on a <code>push</code> event,
+                GitHub Actions runs the workflows <em>that exist on the branch
+                that was pushed</em>, not the ones on <code>main</code>. My
+                workflow lived on <code>main</code>, and the orphan branch
+                didn't even have a <code>.github/</code> directory. A list file
+                can't trigger itself.
+              </p>
+
+              <p>
+                The fix is to put a minimal workflow <em>on that branch</em>,
+                one that duplicates no logic: it checks out <code>main</code>
+                and runs the same script. The same rule explains a second
+                stumble — a relative reference to
+                <code>./.github/workflows/x.yml</code> inside a workflow called
+                from another branch resolves against <em>that other</em> branch,
+                so reusable workflows have to be referenced by their absolute
+                path and ref: <code>org/repo/.github/workflows/x.yml@main</code>.
+              </p>
+
+              <h3>2. A push with GITHUB_TOKEN doesn't trigger other workflows</h3>
+
+              <p>
+                This is GitHub policy and it exists to prevent infinite loops:
+                anything pushed by a workflow authenticated with the default
+                <code>GITHUB_TOKEN</code>
+                <strong>generates no events</strong> for other workflows.
+              </p>
+
+              <p>
+                Practical consequence: the rebuild force-pushes the QA branch,
+                but that will <em>not</em> trigger the deploy workflow no matter
+                how well written it is. You have to call it explicitly from the
+                same run. If you're coming from an event-chained pipeline, this
+                is the one that'll bite you.
+              </p>
+
+              <p>
+                From the same set of administrative surprises: if the
+                repository's default permissions are <code>read</code>, any
+                workflow that pushes or cuts a release has to declare
+                <code>permissions: contents: write</code>. It fails at the end,
+                not at the start.
+              </p>
+
+              <h3>3. Compare trees, not SHAs</h3>
+
+              <p>
+                My favorite, because it's a conceptual bug and not a code one.
+              </p>
+
+              <p>
+                After rebuilding, you want to deploy
+                <strong>only if something changed</strong>. The reflex is to
+                compare the new SHA against the previous one. It doesn't work:
+                <strong>a rebuild always produces new SHAs</strong>. Merge
+                commits are new objects, with new timestamps, even when the
+                resulting content is identical byte for byte.
+              </p>
+
+              <p>
+                Comparing SHAs, every rebuild reports "changed" and deploys.
+                Every push to <code>main</code> pays for a five-minute remote
+                build to publish exactly what was already there.
+              </p>
+
+              <p>
+                What you want to compare is the <strong>tree</strong>: the
+                object that represents the content, not the history that led to
+                it.
+              </p>
+
+              <pre><code><span class="c-bad"># always different: includes history and timestamps</span>
+git rev-parse HEAD
+
+<span class="c-ok"># identical if the content is identical, wherever it came from</span>
+git rev-parse HEAD^{tree}</code></pre>
+
+              <p>
+                Two lines. It kills most of the useless deploys. And it's a
+                healthy reminder that in git, content and history are different
+                things, even though we spend all day treating them as one.
+              </p>
+
+              <h3>4. The lockfile breaks late, in the remote build</h3>
+
+              <p>
+                Merging several branches that touched dependencies can leave a
+                lockfile inconsistent with <code>package.json</code>. Locally
+                you never notice: the package manager quietly fixes it on
+                install.
+              </p>
+
+              <p>
+                But remote builds run with <code>CI=1</code>, and in CI mode
+                installs are <strong>immutable</strong>: if the lockfile doesn't
+                add up, the build fails. Not at the merge, where it would make
+                sense — <em>at the end</em>, five minutes later, in the build,
+                with an error that never mentions the word "merge".
+              </p>
+
+              <p>
+                It's worth validating lockfile consistency right after the
+                merges and bailing out there, with a message that says what
+                happened. Moving a failure from "five minutes and a weird error"
+                to "ten seconds and a clear message" is one of the highest
+                return things you can do to a pipeline.
+              </p>
+
+              <hr />
+
+              <h2>Before and after</h2>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="wrap">Operation</th>
+                      <th class="wrap">Long-lived branch</th>
+                      <th class="wrap">Disposable composition</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="wrap">Knowing what's in QA</td>
+                      <td class="wrap">
+                        <span class="val-bad">Read the history and guess</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">Read a file</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Adding a feature</td>
+                      <td class="wrap">A merge</td>
+                      <td class="wrap">
+                        <span class="val-ok">One line</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Removing a feature</td>
+                      <td class="wrap">
+                        <span class="val-bad">Revert a buried merge</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">Delete one line</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Drift against production</td>
+                      <td class="wrap">
+                        <span class="val-bad">Inevitable</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">Impossible</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Conflict between two features</td>
+                      <td class="wrap">
+                        <span class="val-warn">Resolved, then lost</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">Own branch, reviewable</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Audit trail for environment changes</td>
+                      <td class="wrap">
+                        <span class="val-bad">None</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">git log</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Is <code>main</code> production?</td>
+                      <td class="wrap"><span class="val-bad">No</span></td>
+                      <td class="wrap"><span class="val-ok">Yes</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p>
+                On the production side the setup becomes almost boring, which is
+                the goal: <code>main</code> is exactly what's deployed, history
+                is linear (squash only), and production is reached solely by
+                cutting a tag. A rollback is two steps — roll back the deploy
+                <em>and</em> a <code>git revert</code> with its patch release —
+                because if you only do the first one, <code>main</code> starts
+                lying again and the next deploy resurrects the bug.
+              </p>
+
+              <h2>What I'm taking away</h2>
+
+              <p>
+                <strong>One: environments are states, not histories.</strong>
+                This is the real lesson. A long-lived branch models an
+                environment as the sum of everything that happened; a manifest
+                models it as what it is now. The second representation answers
+                "what's in there?" in constant time and lets you remove things
+                without archaeology. If that sounds like declarative
+                infrastructure, it's because it's exactly that, applied to
+                branches instead of servers.
+              </p>
+
+              <p>
+                <strong>Two: when a process depends on discipline, the design is
+                the problem.</strong> I spent a while thinking about how to get
+                the team to remember to pull features out of QA. The right
+                question was why pulling them out cost so much. Doing the right
+                thing has to be the easiest thing, not the most virtuous one; if
+                it only works while everyone is paying attention, it will fail.
+              </p>
+
+              <p>
+                <strong>Three: disposable is more reliable than
+                well-tended.</strong> Counterintuitive and true. A QA branch
+                that gets destroyed and rebuilt on every change cannot
+                accumulate drift, orphaned state or unreviewed fixes. The same
+                reasons we prefer immutable containers over pet servers apply
+                verbatim to a git branch.
+              </p>
+
+              <p>
+                <strong>Four: every surprise was in the platform, not in the
+                design.</strong> I wrote the scheme in an afternoon. The days
+                went into discovering that a push runs the workflows of the
+                branch that was pushed, that a <code>GITHUB_TOKEN</code> doesn't
+                chain events, and that comparing SHAs is an elegant way to
+                deploy the same thing forty times. None of the three shows up on
+                an architecture diagram — and all three would have sunk the
+                implementation silently.
+              </p>
+
+              <p>
+                If you have a QA branch nobody dares to look at, you don't need
+                a better process to take care of it. You probably need to stop
+                taking care of it and learn to throw it away every day.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="prompt">~$</span>
+            <span class="command">cd ..</span>
+          </div>
+          <div class="section-content">
+            <div class="post-nav">
+              <a href="/en/#blog">back to blog</a>
+              <a href="/en/#contact" class="fwd">let's talk</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="terminal-footer">
+        <div class="footer-content">
+          <span>&copy; 2026 Brandon Sanchez</span>
+          <span class="separator">|</span>
+          <a href="https://github.com/bssanchez" target="_blank" rel="noopener"
+            >github</a
+          >
+          <span class="separator">&middot;</span>
+          <a
+            href="https://www.linkedin.com/in/bssanchez93/"
+            target="_blank"
+            rel="noopener"
+            >linkedin</a
+          >
+          <span class="separator">|</span>
+          <span>Published: <time datetime="2026-10-19">2026-10-19</time></span>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/script.js"></script>
+  </body>
+</html>

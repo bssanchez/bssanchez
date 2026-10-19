@@ -110,6 +110,9 @@
     border: none;
     padding: 0;
     font-size: inherit;
+    /* .post-body code aplica nowrap, que dentro de un <pre> colapsa los
+       saltos de linea; aqui hay que devolverle el preformateado. */
+    white-space: pre;
 }
 
 .post-body code {

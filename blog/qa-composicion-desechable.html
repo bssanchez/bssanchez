@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Durante meses nadie supo con certeza qué había en QA. La solución no fue más disciplina: fue dejar de tratar QA como una rama y empezar a tratarla como una receta en un archivo de texto."
+    />
+    <meta
+      name="keywords"
+      content="git, ci/cd, github actions, qa, ambientes, trunk based development, devops, branching"
+    />
+    <meta name="author" content="Brandon Sanchez" />
+    <title>
+      QA dejó de ser una rama: el ambiente de pruebas como archivo de texto |
+      Brandon Sanchez
+    </title>
+
+    <link rel="canonical" href="https://codesan.dev/blog/qa-composicion-desechable" />
+    <link rel="alternate" hreflang="es" href="https://codesan.dev/blog/qa-composicion-desechable" />
+    <link rel="alternate" hreflang="en" href="https://codesan.dev/en/blog/qa-disposable-composition" />
+    <link rel="alternate" hreflang="x-default" href="https://codesan.dev/blog/qa-composicion-desechable" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="codesan.dev" />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:url" content="https://codesan.dev/blog/qa-composicion-desechable" />
+    <meta
+      property="og:title"
+      content="QA dejó de ser una rama: el ambiente de pruebas como archivo de texto"
+    />
+    <meta
+      property="og:description"
+      content="main había dejado de ser producción y nadie sabía qué había en QA. La solución no fue más disciplina: fue volver el ambiente de pruebas desechable y reconstruirlo desde cero en cada push."
+    />
+    <meta
+      property="og:image"
+      content="https://codesan.dev/assets/og/qa-es.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Terminal con el comando: cat qa-composicion-desechable.md"
+    />
+    <meta property="article:published_time" content="2026-10-19" />
+    <meta property="article:author" content="Brandon Sanchez" />
+    <meta property="article:tag" content="git" />
+    <meta property="article:tag" content="CI/CD" />
+    <meta property="article:tag" content="DevOps" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="QA dejó de ser una rama: el ambiente de pruebas como archivo de texto"
+    />
+    <meta
+      name="twitter:description"
+      content="main había dejado de ser producción y nadie sabía qué había en QA. La solución fue volver el ambiente desechable y reconstruirlo desde cero en cada push."
+    />
+    <meta
+      name="twitter:image"
+      content="https://codesan.dev/assets/og/qa-es.png"
+    />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#1e1e2e" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "QA dejó de ser una rama: el ambiente de pruebas como archivo de texto",
+        "description": "Durante meses nadie supo con certeza qué había en QA. La solución no fue más disciplina: fue dejar de tratar QA como una rama y empezar a tratarla como una receta en un archivo de texto.",
+        "inLanguage": "es",
+        "datePublished": "2026-10-19",
+        "dateModified": "2026-10-19",
+        "image": "https://codesan.dev/assets/og/qa-es.png",
+        "author": {
+          "@type": "Person",
+          "name": "Brandon Sanchez",
+          "url": "https://codesan.dev/"
+        },
+        "publisher": {
+          "@type": "Person",
+          "name": "Brandon Sanchez",
+          "url": "https://codesan.dev/"
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://codesan.dev/blog/qa-composicion-desechable"
+        }
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/blog.css" />
+  </head>
+  <body data-lang="es">
+    <div class="container">
+      <header class="terminal-header">
+        <div class="terminal-title">
+          <span class="prompt">bsanchez@codesan.dev:~/blog$</span>
+          <span class="cursor-blink">_</span>
+        </div>
+        <div class="terminal-controls">
+          <a
+            href="/en/blog/qa-disposable-composition.html"
+            class="control-btn"
+            aria-label="Switch to English"
+          >
+            <span class="lang-indicator">EN</span>
+          </a>
+          <button id="themeToggle" class="control-btn" aria-label="Cambiar Tema">
+            <span class="theme-icon">◐</span>
+          </button>
+        </div>
+      </header>
+
+      <nav class="terminal-nav">
+        <ul>
+          <li><a href="/">inicio</a></li>
+          <li><a href="/#about">acerca</a></li>
+          <li><a href="/#blog">blog</a></li>
+          <li><a href="/#contact">contacto</a></li>
+        </ul>
+      </nav>
+
+      <main class="terminal-content">
+        <article class="section">
+          <div class="section-header">
+            <span class="prompt">~$</span>
+            <span class="command">cat qa-composicion-desechable.md</span>
+          </div>
+          <div class="section-content">
+            <div class="post-meta">
+              <span><span class="meta-key">fecha:</span> 2026-10-19</span>
+              <span><span class="meta-key">lectura:</span> ~10 min</span>
+              <span
+                ><span class="meta-key">tags:</span> git, ci/cd, devops</span
+              >
+            </div>
+
+            <div class="post-body">
+              <h1 style="font-size: 19px; margin-bottom: 18px">
+                QA dejó de ser una rama: el ambiente de pruebas como archivo de
+                texto
+              </h1>
+
+              <p>
+                Llegué a un proyecto donde la pregunta <em>"¿qué hay en QA
+                ahora mismo?"</em> no tenía respuesta. No una respuesta
+                incompleta: <strong>no tenía respuesta</strong>. Había que leer
+                el historial de una rama con cientos de merges y adivinar.
+              </p>
+
+              <p>
+                Lo que sigue es cómo salimos de ahí. Adelanto la parte
+                contraintuitiva: la solución no fue más disciplina, ni un
+                documento de proceso, ni un tablero mejor cuidado.
+                <strong>Fue quitarle a QA la propiedad de ser una
+                rama.</strong>
+              </p>
+
+              <h2>El síntoma: main había dejado de ser producción</h2>
+
+              <p>
+                El contexto, en lo que importa para el problema: una aplicación
+                web con un equipo de varias personas, releases frecuentes y un
+                cliente que aprueba los cambios antes de que salgan. Tres
+                entornos: producción, un QA que ve el cliente, y las ramas de
+                cada quien.
+              </p>
+
+              <p>
+                El esquema era el de siempre, el que todos hemos usado: una rama
+                <code>qa</code> de larga vida. Mergeas tu feature
+                ahí, el cliente la revisa, y cuando aprueba la mergeas a
+                <code>main</code>. Simple y perfectamente razonable.
+              </p>
+
+              <p>
+                Salvo que, después de un año, el inventario real era este:
+              </p>
+
+              <ul>
+                <li>
+                  Features aprobadas que llevaban <strong>seis meses</strong> en
+                  QA sin llegar a producción, porque el cliente las aprobó pero
+                  nadie cerró el ciclo.
+                </li>
+                <li>
+                  Features <em>rechazadas</em> que seguían en QA, porque sacarlas
+                  significaba revertir un merge en medio de otros cincuenta.
+                </li>
+                <li>
+                  Conflictos entre dos features resueltos <em>dentro</em> de QA.
+                  Esa resolución no existía en ninguna otra parte: no estaba
+                  revisada, no estaba en ningún PR, y no iba a llegar a
+                  producción con las features.
+                </li>
+                <li>
+                  Y lo que lo volvió urgente:
+                  <strong><code>main</code> ya no era producción</strong>. Cosas
+                  que estaban en producción no estaban en <code>main</code>, y
+                  cosas en <code>main</code> no estaban desplegadas. Hubo que
+                  revertir <code>main</code> al estado estable de dos semanas
+                  atrás para recuperar una referencia confiable.
+                </li>
+              </ul>
+
+              <div class="callout warn">
+                <span class="callout-label">EL VERDADERO COSTO</span>
+                <p>
+                  Cuando <code>main</code> deja de ser igual a producción,
+                  pierdes la capacidad de responder la única pregunta que
+                  importa en un incidente: <strong>¿qué está corriendo
+                  ahora?</strong> Todo lo demás — rollbacks, hotfixes,
+                  auditoría — se construye encima de esa respuesta. Sin ella,
+                  cada despliegue es una apuesta.
+                </p>
+              </div>
+
+              <h2>Por qué pasó: una rama de larga vida es un log, no un estado</h2>
+
+              <p>
+                Tardé en ver que no era un problema de gente descuidada. Era un
+                problema estructural, y se resume así:
+              </p>
+
+              <p>
+                <strong>Una rama de larga vida registra decisiones; no
+                representa un estado.</strong> Cada merge a QA es una línea
+                añadida a un log de solo-escritura. La rama no dice "estas cinco
+                features están en pruebas": dice "esto fue pasando, en este
+                orden, durante catorce meses". Para saber el estado actual hay
+                que <em>replicar mentalmente el log completo</em>.
+              </p>
+
+              <p>
+                De ahí sale todo lo demás. Sacar una feature de QA es
+                caro — hay que revertir un commit enterrado — así que nadie lo
+                hace, así que QA solo crece. Y al crecer, divergir de
+                producción deja de ser un accidente: es el comportamiento por
+                defecto del diseño.
+              </p>
+
+              <p>
+                Visto así, pedirle disciplina al equipo era pedirle que
+                compensara a mano un sistema que empujaba en la dirección
+                contraria. Eso nunca gana.
+              </p>
+
+              <h2>La inversión: QA no se mergea, se reconstruye</h2>
+
+              <p>
+                El cambio de fondo es una sola frase:
+              </p>
+
+              <div class="callout">
+                <span class="callout-label">LA REGLA QUE CAMBIA TODO</span>
+                <p>
+                  La rama de QA es <strong>desechable</strong>. No se le hace
+                  push nunca. En cada cambio se <strong>reconstruye desde
+                  cero</strong> como <code>main</code> más el merge de una lista
+                  de ramas. Lo que se commitea ahí se pierde, por diseño.
+                </p>
+              </div>
+
+              <p>
+                El algoritmo completo cabe en cinco líneas:
+              </p>
+
+              <pre><code><span class="c-dim"># reconstruir QA (en un worktree temporal, no en tu copia)</span>
+git switch --detach origin/main
+<span class="c-dim">for cada rama en la lista:</span>
+    git merge --no-ff origin/$rama
+git push --force origin HEAD:qa</code></pre>
+
+              <p>
+                Parece violento y es exactamente lo contrario: es lo que vuelve
+                QA <em>barato</em>. Fíjate en lo que acaba de pasar con los
+                problemas de arriba:
+              </p>
+
+              <ul>
+                <li>
+                  <strong>Sacar una feature de QA</strong> ya no es revertir un
+                  merge. Es borrar una línea de una lista. La siguiente
+                  reconstrucción simplemente no la incluye.
+                </li>
+                <li>
+                  <strong>QA no puede divergir de producción.</strong> Arranca
+                  desde <code>origin/main</code> cada vez. La deriva es
+                  matemáticamente imposible, no "desaconsejada".
+                </li>
+                <li>
+                  <strong>El inventario de QA es la lista.</strong> La pregunta
+                  que no tenía respuesta ahora es un <code>cat</code>.
+                </li>
+                <li>
+                  <strong><code>main</code> vuelve a ser producción</strong>,
+                  porque ya nada se mergea "hacia" QA: QA se deriva de
+                  <code>main</code>, nunca al revés.
+                </li>
+              </ul>
+
+              <h2>La lista vive en git, y eso no es un detalle</h2>
+
+              <p>
+                La primera versión que pensé guardaba la lista en variables del
+                repositorio, editables desde la interfaz. Lo descarté por algo
+                que resultó ser la mejor decisión del diseño:
+                <strong>una lista editable desde una UI no tiene
+                historial</strong>. No sabes quién metió esa feature, ni cuándo,
+                ni por qué. Y si el ambiente de QA se rompe, no puedes hacer
+                <code>git log</code> sobre la causa.
+              </p>
+
+              <p>
+                Así que la lista es un archivo de texto plano, en una
+                <strong>rama huérfana</strong> — sin historia compartida con
+                <code>main</code>, sin una línea de código del producto. Un
+                archivo por ambiente, con el nombre del ambiente:
+              </p>
+
+              <div class="prompt-box">
+                <div class="prompt-box-header">compose-config:qa</div>
+                <div class="prompt-box-body">
+                  <p># QA del cliente. Una rama por línea.</p>
+                  <p>
+                    integration/checkout+catalogo<br />
+                    feature/reportes-csv<br />
+                    feature/inestable@a1b2c3d&nbsp;&nbsp;# fijada a un commit
+                  </p>
+                </div>
+              </div>
+
+              <p>
+                El formato se explica solo, que era el punto. Una rama por
+                línea, <code>#</code> para comentarios, líneas en blanco
+                ignoradas. Dos decisiones que sí vale la pena justificar:
+              </p>
+
+              <p>
+                <strong>Un archivo sin entradas significa ambiente
+                libre</strong>, y resetea la rama a <code>main</code>. Liberar
+                un ambiente es borrar líneas, no un comando especial. El estado
+                "vacío" es representable, que es justo lo que le faltaba al
+                esquema anterior.
+              </p>
+
+              <p>
+                <strong>El pin <code>@sha</code> congela una feature en un
+                commit.</strong> Nació de un caso muy concreto: una rama
+                inestable que se quería tener en QA pero cuyos pushes rompían el
+                ambiente para todos los demás. Con el pin, un push a esa rama
+                <em>no</em> dispara reconstrucción.
+              </p>
+
+              <p>
+                Y como la lista es git, <strong>el disparador es el
+                push</strong>. No hay botón, no hay cron, no hay sincronización
+                que se pueda quedar atrás. Editar el archivo sin pushear no hace
+                nada, y eso es bueno: el único momento en que el ambiente cambia
+                es un evento auditable con autor y fecha.
+              </p>
+
+              <h2>Las features que chocan no se arreglan en QA</h2>
+
+              <p>
+                Queda un caso que el esquema anterior resolvía mal y que merece
+                regla propia: dos features que conflictúan entre sí.
+              </p>
+
+              <p>
+                Antes se resolvía dentro de QA, y ya vimos el resultado: la
+                resolución queda en una rama desechable, sin revisar, y nunca
+                llega a producción. Con el esquema nuevo ni siquiera es posible
+                — la reconstrucción fallaría en el <code>merge</code> y punto.
+              </p>
+
+              <p>
+                La regla es: el conflicto se resuelve en una rama
+                <code>integration/a+b</code>, y <strong>esa</strong> rama se
+                lista en QA <em>en lugar de</em> las dos que chocan.
+              </p>
+
+              <pre><code><span class="c-bad"># mal: la reconstrucción falla</span>
+feature/checkout
+feature/catalogo
+
+<span class="c-ok"># bien: el conflicto ya viene resuelto, y es revisable</span>
+integration/checkout+catalogo</code></pre>
+
+              <p>
+                El beneficio de fondo es que <strong>la resolución del conflicto
+                pasa a ser un artefacto de primera clase</strong>: tiene rama,
+                tiene autor, tiene diff, se puede revisar en un PR y llega a
+                producción junto con las features. Deja de ser un merge commit
+                anónimo dentro de una rama que se va a borrar.
+              </p>
+
+              <hr />
+
+              <h2>Cuatro cosas que no eran obvias</h2>
+
+              <p>
+                El diseño es simple. Implementarlo tuvo cuatro sorpresas que me
+                costaron tiempo real, y son la parte de este artículo que más me
+                hubiera gustado leer antes.
+              </p>
+
+              <h3>1. Un push ejecuta los workflows de la rama pusheada</h3>
+
+              <p>
+                El primer push a la rama de listas disparó
+                <strong>cero</strong> ejecuciones. No falló: no pasó nada.
+              </p>
+
+              <p>
+                La razón, obvia en retrospectiva: en un evento
+                <code>push</code>, GitHub Actions ejecuta los workflows
+                <em>que existen en la rama que se pusheó</em>, no los de
+                <code>main</code>. Mi workflow vivía en <code>main</code>, y la
+                rama huérfana no tenía ni carpeta <code>.github/</code>. Un
+                archivo de lista no puede dispararse solo.
+              </p>
+
+              <p>
+                La solución es poner un workflow mínimo <em>en esa rama</em>, que
+                no duplique lógica: hace checkout de <code>main</code> y ejecuta
+                el mismo script. La misma regla explica un segundo tropiezo —
+                una referencia relativa a
+                <code>./.github/workflows/x.yml</code> dentro de un workflow
+                llamado desde otra rama se resuelve contra <em>esa otra</em>
+                rama, así que hay que referenciar los workflows reutilizables
+                con su ruta absoluta y su ref: <code>org/repo/.github/workflows/x.yml@main</code>.
+              </p>
+
+              <h3>2. Un push con GITHUB_TOKEN no dispara otros workflows</h3>
+
+              <p>
+                Esta es política de GitHub y existe para evitar bucles
+                infinitos: lo que empuja un workflow autenticado con el
+                <code>GITHUB_TOKEN</code> por defecto
+                <strong>no genera eventos</strong> para otros workflows.
+              </p>
+
+              <p>
+                Consecuencia práctica: la reconstrucción hace force-push a la
+                rama de QA, pero eso <em>no</em> va a disparar el workflow de
+                despliegue por más bien escrito que esté. Hay que llamarlo
+                explícitamente desde el mismo run. Si vienes de una pipeline
+                encadenada por eventos, este es el que te va a morder.
+              </p>
+
+              <p>
+                Del mismo set de sorpresas administrativas: si los permisos por
+                defecto del repositorio están en <code>read</code>, cualquier
+                workflow que haga push o cree un release necesita declarar
+                <code>permissions: contents: write</code>. Falla al final, no al
+                principio.
+              </p>
+
+              <h3>3. Compara árboles, no SHAs</h3>
+
+              <p>
+                Mi favorita, porque es un bug de concepto y no de código.
+              </p>
+
+              <p>
+                Después de reconstruir, quieres desplegar
+                <strong>solo si algo cambió</strong>. El reflejo es comparar el
+                SHA nuevo contra el anterior. No funciona:
+                <strong>una reconstrucción produce SHAs nuevos siempre</strong>.
+                Los merge commits son nuevos objetos, con timestamp nuevo, aunque
+                el contenido resultante sea idéntico byte a byte.
+              </p>
+
+              <p>
+                Comparando SHAs, cada reconstrucción reporta "cambió" y
+                despliega. Cada push a <code>main</code> paga un build remoto de
+                cinco minutos para publicar exactamente lo mismo que ya estaba.
+              </p>
+
+              <p>
+                Lo que quieres comparar es el <strong>árbol</strong>: el objeto
+                que representa el contenido, no la historia que llevó a él.
+              </p>
+
+              <pre><code><span class="c-bad"># siempre distinto: incluye historia y timestamps</span>
+git rev-parse HEAD
+
+<span class="c-ok"># igual si el contenido es igual, venga de donde venga</span>
+git rev-parse HEAD^{tree}</code></pre>
+
+              <p>
+                Dos líneas. Elimina la mayoría de los despliegues inútiles. Y es
+                un recordatorio sano de que en git el contenido y la historia son
+                cosas distintas, aunque uno pase el día tratándolas como una
+                sola.
+              </p>
+
+              <h3>4. El lockfile se rompe tarde, en el build remoto</h3>
+
+              <p>
+                Mergear varias ramas que tocaron dependencias puede dejar un
+                lockfile inconsistente con el <code>package.json</code>. En
+                local no te enteras: el gestor de paquetes lo arregla solo al
+                instalar.
+              </p>
+
+              <p>
+                Pero los builds remotos corren con <code>CI=1</code>, y en modo
+                CI las instalaciones son <strong>inmutables</strong>: si el
+                lockfile no cuadra, el build falla. No en el merge, que es donde
+                tendría sentido — <em>al final</em>, cinco minutos después, en el
+                build, con un error que no menciona la palabra "merge".
+              </p>
+
+              <p>
+                Vale la pena validar la consistencia del lockfile justo después
+                de los merges y abortar ahí, con un mensaje que diga qué pasó.
+                Mover un fallo de "cinco minutos y un error raro" a "diez
+                segundos y un mensaje claro" es de las cosas más rentables que
+                puedes hacerle a una pipeline.
+              </p>
+
+              <hr />
+
+              <h2>Antes y después</h2>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="wrap">Operación</th>
+                      <th class="wrap">Rama de larga vida</th>
+                      <th class="wrap">Composición desechable</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="wrap">Saber qué hay en QA</td>
+                      <td class="wrap">
+                        <span class="val-bad">Leer el historial y adivinar</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">Leer un archivo</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Meter una feature</td>
+                      <td class="wrap">Merge</td>
+                      <td class="wrap">
+                        <span class="val-ok">Una línea</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Sacar una feature</td>
+                      <td class="wrap">
+                        <span class="val-bad">Revertir un merge enterrado</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">Borrar una línea</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Deriva contra producción</td>
+                      <td class="wrap">
+                        <span class="val-bad">Inevitable</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">Imposible</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Conflicto entre dos features</td>
+                      <td class="wrap">
+                        <span class="val-warn">Se resuelve y se pierde</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">Rama propia, revisable</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">Auditoría de cambios de ambiente</td>
+                      <td class="wrap">
+                        <span class="val-bad">Ninguna</span>
+                      </td>
+                      <td class="wrap">
+                        <span class="val-ok">git log</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="wrap">¿<code>main</code> es producción?</td>
+                      <td class="wrap"><span class="val-bad">No</span></td>
+                      <td class="wrap"><span class="val-ok">Sí</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p>
+                Del lado de producción el esquema se vuelve casi aburrido, que es
+                el objetivo: <code>main</code> es exactamente lo que está
+                desplegado, el historial es lineal (solo squash), y a producción
+                se llega únicamente creando un tag. Un rollback son dos pasos —
+                revertir el despliegue <em>y</em> un
+                <code>git revert</code> con su release de parche — porque si solo
+                haces el primero, <code>main</code> vuelve a mentir y el
+                siguiente despliegue resucita el error.
+              </p>
+
+              <h2>Qué me llevo</h2>
+
+              <p>
+                <strong>Uno: los ambientes son estados, no historiales.</strong>
+                Este es el aprendizaje de verdad. Una rama de larga vida modela
+                un ambiente como la suma de todo lo que pasó; un manifiesto lo
+                modela como lo que es ahora. La segunda representación responde
+                "¿qué hay?" en tiempo constante y permite quitar cosas sin
+                arqueología. Si te suena a infraestructura declarativa es porque
+                es exactamente eso, aplicado a ramas en vez de a servidores.
+              </p>
+
+              <p>
+                <strong>Dos: cuando el proceso depende de disciplina, el
+                problema es el diseño.</strong> Pasé un rato pensando en cómo
+                lograr que el equipo recordara sacar las features de QA. La
+                pregunta correcta era por qué sacarlas costaba tanto. Hacer lo
+                correcto tiene que ser lo más fácil, no lo más virtuoso; si solo
+                funciona con todos atentos, va a fallar.
+              </p>
+
+              <p>
+                <strong>Tres: lo desechable es más confiable que lo
+                cuidado.</strong> Contraintuitivo y cierto. La rama de QA que se
+                destruye y se rehace en cada cambio no puede acumular deriva,
+                estado huérfano ni arreglos sin revisar. Las mismas razones por
+                las que preferimos contenedores inmutables a servidores con
+                mascotas aplican tal cual a una rama de git.
+              </p>
+
+              <p>
+                <strong>Cuatro: las sorpresas estaban todas en la plataforma, no
+                en el diseño.</strong> El esquema lo escribí en una tarde. Los
+                días se fueron en descubrir que un push ejecuta los workflows de
+                la rama pusheada, que un
+                <code>GITHUB_TOKEN</code> no encadena eventos, y que comparar
+                SHAs es una forma elegante de desplegar lo mismo cuarenta veces.
+                Ninguna de las tres sale en el diagrama de arquitectura — y las
+                tres habrían hundido la implementación en silencio.
+              </p>
+
+              <p>
+                Si tienes una rama de QA que nadie se atreve a mirar, no
+                necesitas un proceso mejor para cuidarla. Probablemente necesitas
+                dejar de cuidarla y aprender a tirarla a la basura todos los
+                días.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="prompt">~$</span>
+            <span class="command">cd ..</span>
+          </div>
+          <div class="section-content">
+            <div class="post-nav">
+              <a href="/#blog">volver al blog</a>
+              <a href="/#contact" class="fwd">hablemos</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="terminal-footer">
+        <div class="footer-content">
+          <span>&copy; 2026 Brandon Sanchez</span>
+          <span class="separator">|</span>
+          <a href="https://github.com/bssanchez" target="_blank" rel="noopener"
+            >github</a
+          >
+          <span class="separator">&middot;</span>
+          <a
+            href="https://www.linkedin.com/in/bssanchez93/"
+            target="_blank"
+            rel="noopener"
+            >linkedin</a
+          >
+          <span class="separator">|</span>
+          <span>Publicado: <time datetime="2026-10-19">2026-10-19</time></span>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/script.js"></script>
+  </body>
+</html>
